@@ -1,12 +1,13 @@
+CrmUtils for MS Dynamics using JAVA
 
-        CRM On-premises
+CRM On-premises
         String url = "https://server";
         String username = "domain\\user";
         String password = "password";
 
         OrganizationService service = new OrganizationService(url, username, password, true);
 		
-		Crm OnLine
+Crm OnLine
 		CRM On-premises
         String url = "https://server";
         String username = "user@domain.com";
@@ -14,8 +15,7 @@
 
         OrganizationService service = new OrganizationService(url, username, password, false);
 		
-		
-        Creating a LiveHive Contact
+ Creating a LiveHive Contact
         LiveHiveContact liveHiveContact = new LiveHiveContact();
         
         liveHiveContact.setFirstname("Test");
@@ -38,25 +38,25 @@
         
         service.Create(liveHiveContact.toEntity());
 		
-		Check if a solution has been installed
+Check if a solution has been installed
 		boolean solutionExists = service.hasSolutionInstalled("xLiveHive");
 		
-		Retrieve leads by email
+Retrieve leads by email
 		List<Lead> leadsByName = service.RetrieveLeadByEmail("guluarte@gmail.com");
 		
-		Retrieving entities
+Retrieving entities
 		NodeList nodes = service.Retrieve(EntityName.Annotation, "85c7d950-4c36-e511-80c5-00155dfe6a4d", Note.NoteColumns);
 		Note test = new Note(nodes);
 		
-		Setting status reason and state code
+Setting status reason and state code
 		BaseEntity.StatusAndStatusReason contacted = lead.getStatusOpenAndContacted();
 		service.SetStateRequest(lead.toEntityReference(), contacted.State, contacted.Status);
 		
-		Retrieving Notes
+Retrieving Notes
 		ArrayList<Note> noteDocumnets = service.RetrieveAllNoteDocuments();
 		
-		Creating notes with attachments
-		        File file = new File("Test.xlsx");
+Creating notes with attachments
+		File file = new File("Test.xlsx");
         String fileBytes = encodeFileToBase64Binary(file.getAbsolutePath());
 
         MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
@@ -76,7 +76,7 @@
 
         Note createdNote = new Note(noteNodes);
 		
-		Sample creating an opportunity
+Sample creating an opportunity
 		Opportunity op = new Opportunity();
         op.setName("Test from java");
         op.setBudgetamount(new BigDecimal(50));
@@ -88,9 +88,9 @@
 
         op.setId(service.Create(op.toEntity()));
 		
-		Updating an entity
+Updating an entity
 		service.Update(op.toEntity());
 		
-		And deleting an entity
+And deleting an entity
 		service.Delete(id, entityName);
 		
