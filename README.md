@@ -106,3 +106,8 @@ And deleting an entity
 
         service.Delete(id, entityName);
 		
+Retrieving all entities and building them
+
+        Document NoteDocument = service.RetrieveAll(EntityName.Annotation, Note.NoteColumns, null);
+        EntityFactory entityFactory = new EntityFactory<>(Note.class);
+        ArrayList<Note> notes = entityFactory.Build(NoteDocument);
