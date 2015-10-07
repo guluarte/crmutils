@@ -16,6 +16,9 @@ Crm OnLine
 
         OrganizationService service = new OrganizationService(url, username, password, false);
 		
+Getting the current User Id
+        String userId = service.WhoAmIRequest();
+		
  Creating a LiveHive Contact
  
         LiveHiveContact liveHiveContact = new LiveHiveContact();
