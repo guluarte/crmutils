@@ -26,7 +26,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 import org.w3c.dom.NodeList;
@@ -257,6 +256,7 @@ public class OrganizationService {
 
     /**
      * Set the status and state for the entity
+     *
      * @param ref
      * @param statusAndState
      * @throws SAXException
@@ -1331,4 +1331,82 @@ public class OrganizationService {
 
         return null;
     }
+
+    /**
+     * Returns true if the solution with the given name exists or false otherwise
+     * @param solutionName
+     * @return true or false
+     * @throws SAXException
+     * @throws ParserConfigurationException
+     * @throws Exception
+     */
+    public boolean hasSolutionInstalled(String solutionName) throws SAXException, ParserConfigurationException, Exception {
+        
+        String request = "  <s:Body>\n"
+                + "    <Execute xmlns=\"http://schemas.microsoft.com/xrm/2011/Contracts/Services\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">\n"
+                + "      <request i:type=\"a:RetrieveMultipleRequest\" xmlns:a=\"http://schemas.microsoft.com/xrm/2011/Contracts\">\n"
+                + "        <a:Parameters xmlns:b=\"http://schemas.datacontract.org/2004/07/System.Collections.Generic\">\n"
+                + "          <a:KeyValuePairOfstringanyType>\n"
+                + "            <b:key>Query</b:key>\n"
+                + "            <b:value i:type=\"a:QueryExpression\">\n"
+                + "              <a:ColumnSet>\n"
+                + "                <a:AllColumns>true</a:AllColumns>\n"
+                + "                <a:Columns xmlns:c=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\" />\n"
+                + "              </a:ColumnSet>\n"
+                + "              <a:Criteria>\n"
+                + "                <a:Conditions>\n"
+                + "                  <a:ConditionExpression>\n"
+                + "                    <a:AttributeName>uniquename</a:AttributeName>\n"
+                + "                    <a:Operator>Equal</a:Operator>\n"
+                + "                    <a:Values xmlns:c=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">\n"
+                + "                      <c:anyType i:type=\"d:string\" xmlns:d=\"http://www.w3.org/2001/XMLSchema\">" + solutionName + "</c:anyType>\n"
+                + "                    </a:Values>\n"
+                + "                  </a:ConditionExpression>\n"
+                + "                </a:Conditions>\n"
+                + "                <a:FilterOperator>And</a:FilterOperator>\n"
+                + "                <a:Filters />\n"
+                + "              </a:Criteria>\n"
+                + "              <a:Distinct>false</a:Distinct>\n"
+                + "              <a:EntityName>solution</a:EntityName>\n"
+                + "              <a:LinkEntities />\n"
+                + "              <a:Orders />\n"
+                + "              <a:PageInfo>\n"
+                + "                <a:Count>0</a:Count>\n"
+                + "                <a:PageNumber>0</a:PageNumber>\n"
+                + "                <a:PagingCookie i:nil=\"true\" />\n"
+                + "                <a:ReturnTotalRecordCount>false</a:ReturnTotalRecordCount>\n"
+                + "              </a:PageInfo>\n"
+                + "              <a:NoLock>false</a:NoLock>\n"
+                + "            </b:value>\n"
+                + "          </a:KeyValuePairOfstringanyType>\n"
+                + "        </a:Parameters>\n"
+                + "        <a:RequestId i:nil=\"true\" />\n"
+                + "        <a:RequestName>RetrieveMultiple</a:RequestName>\n"
+                + "      </request>\n"
+                + "    </Execute>\n"
+                + "  </s:Body>";
+        
+        Document xDoc = executeRequest(request);
+        
+        Node node = getValueOfNodeWithName(":Entities", xDoc.getFirstChild());
+
+        if (node == null) {
+            return false;
+        }
+
+        return node.getChildNodes().getLength() > 0;
+    }
+    
+    /**
+     * Executes a SOAP request sending the request and the authHeader.
+     * @param request
+     * @return an XML Document with the response
+     * @throws SAXException
+     * @throws ParserConfigurationException
+     * @throws Exception
+     */
+    public Document executeRequest(String request) throws SAXException, ParserConfigurationException, Exception {
+        return CrmExecuteSoap.ExecuteSoapRequest(authHeader, request, crmServerUrl);
+    }
+
 }

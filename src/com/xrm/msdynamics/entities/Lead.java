@@ -131,6 +131,8 @@ public class Lead extends BaseEntity {
     public static final String BUDGETAMOUNT_COLUMN = "budgetamount";
     public static final String PURCHASEPROCESS_COLUMN = "purchaseprocess";
     public static final String DECISIONMAKER_COLUMN = "decisionmaker";
+    
+   
 
     public static String[] LeadColumns = new String[]{
         SUBJECT_COLUMN,
@@ -651,7 +653,6 @@ public class Lead extends BaseEntity {
         if (getDecisionmaker() != null) {
             parameters.add(getDecisionmaker());
         }
-
         return parameters;
     }
 
@@ -1375,5 +1376,5 @@ public class Lead extends BaseEntity {
     public void setBudgetamount(BigDecimal budgetamount) {
         this.budgetamount = new Money(BUDGETAMOUNT_COLUMN, budgetamount);
     }
-
+    
 }
