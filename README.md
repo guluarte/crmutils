@@ -42,29 +42,30 @@ Crm OnLine
 		
 Check if a solution has been installed
 
-		boolean solutionExists = service.hasSolutionInstalled("xLiveHive");
+        boolean solutionExists = service.hasSolutionInstalled("xLiveHive");
+		
 		
 Retrieve leads by email
 
-		List<Lead> leadsByName = service.RetrieveLeadByEmail("guluarte@gmail.com");
+        List<Lead> leadsByName = service.RetrieveLeadByEmail("guluarte@gmail.com");
 		
 Retrieving entities
 
-		NodeList nodes = service.Retrieve(EntityName.Annotation, "85c7d950-4c36-e511-80c5-00155dfe6a4d", Note.NoteColumns);
-		Note test = new Note(nodes);
+        NodeList nodes = service.Retrieve(EntityName.Annotation, "85c7d950-4c36-e511-80c5-00155dfe6a4d", Note.NoteColumns);
+        Note test = new Note(nodes);
 		
 Setting status reason and state code
 
-		BaseEntity.StatusAndStatusReason contacted = lead.getStatusOpenAndContacted();
-		service.SetStateRequest(lead.toEntityReference(), contacted.State, contacted.Status);
+        BaseEntity.StatusAndStatusReason contacted = lead.getStatusOpenAndContacted();
+        service.SetStateRequest(lead.toEntityReference(), contacted.State, contacted.Status);
 		
 Retrieving Notes
 
-		ArrayList<Note> noteDocumnets = service.RetrieveAllNoteDocuments();
+        ArrayList<Note> noteDocumnets = service.RetrieveAllNoteDocuments();
 		
 Creating notes with attachments
 
-		File file = new File("Test.xlsx");
+        File file = new File("Test.xlsx");
         String fileBytes = encodeFileToBase64Binary(file.getAbsolutePath());
 
         MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
@@ -86,7 +87,7 @@ Creating notes with attachments
 		
 Sample creating an opportunity
 
-		Opportunity op = new Opportunity();
+        Opportunity op = new Opportunity();
         op.setName("Test from java");
         op.setBudgetamount(new BigDecimal(50));
         op.setPurchasetimeframe(Enums.PurshaseTimeframe.NextQuarter);
@@ -99,9 +100,9 @@ Sample creating an opportunity
 		
 Updating an entity
 
-		service.Update(op.toEntity());
+        service.Update(op.toEntity());
 		
 And deleting an entity
 
-		service.Delete(id, entityName);
+        service.Delete(id, entityName);
 		
