@@ -1,5 +1,6 @@
 package com.xrm.msdynamics;
 
+import com.xrm.msdynamics.exceptions.ServiceFaultException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -43,10 +44,11 @@ public class CrmAuth {
 	 * @throws SAXException
 	 * @throws ParserConfigurationException
 	 * @throws XPathExpressionException
+     * @throws com.xrm.msdynamics.exceptions.ServiceFaultException
 	 */
 	public CrmAuthenticationHeader GetHeaderOnline(String username,
 			String password, String url) throws IOException, SAXException,
-			ParserConfigurationException, XPathExpressionException {
+			ParserConfigurationException, XPathExpressionException, ServiceFaultException {
 
 		if (!url.endsWith("/"))
 			url += "/";
@@ -125,8 +127,15 @@ public class CrmAuth {
 				.parse(new ByteArrayInputStream(response.getBytes()));
 
 		NodeList cipherElements = x.getElementsByTagName("CipherValue");
-		String token1 = cipherElements.item(0).getTextContent();
-		String token2 = cipherElements.item(1).getTextContent();
+                
+                //Fixes NPE
+                if(cipherElements == null || cipherElements.item(0) == null || cipherElements.item(1) == null) {
+                    throw new ServiceFaultException("There was an error getting the auth tokens." + response );
+                }
+                
+                String token1 = cipherElements.item(0).getTextContent();
+                String token2 = cipherElements.item(1).getTextContent();
+               
 
 		NodeList keyIdentiferElements = x
 				.getElementsByTagName("wsse:KeyIdentifier");
@@ -324,9 +333,13 @@ public class CrmAuth {
 				.parse(new ByteArrayInputStream(response.getBytes()));
 
 		NodeList cipherValue1 = x.getElementsByTagName("e:CipherValue");
+                NodeList cipherValue2 = x.getElementsByTagName("xenc:CipherValue");
+                
+                if(cipherValue1 == null || cipherValue1.item(0) == null || cipherValue2 == null || cipherValue2.item(0) == null) {
+                    throw new ServiceFaultException("Error getting the Auth tokens." + response);
+                }
+                
 		String token1 = cipherValue1.item(0).getFirstChild().getTextContent();
-
-		NodeList cipherValue2 = x.getElementsByTagName("xenc:CipherValue");
 		String token2 = cipherValue2.item(0).getFirstChild().getTextContent();
 
 		NodeList keyIdentiferElements = x

@@ -1,5 +1,6 @@
 package com.xrm.msdynamics;
 
+import com.xrm.msdynamics.exceptions.ServiceFaultException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -67,7 +68,7 @@ public class CrmExecuteSoap {
                 }
                 String response = sb.toString();
                 
-                throw new Exception(response);
+                throw new ServiceFaultException(response);
             }
             
         }
