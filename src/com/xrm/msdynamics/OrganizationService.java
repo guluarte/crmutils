@@ -842,7 +842,7 @@ public class OrganizationService {
      * @throws ParserConfigurationException
      * @throws Exception
      */
-    public String CreateEmailActivity(String entityName, String toId, String fromId, String subject, String body, int priority) throws SAXException, ParserConfigurationException, Exception {
+    public String CreateEmailActivity(String entityName, String toId, String fromId, String subject, String body, int priority) throws SAXException, ParserConfigurationException, Exception, SAXException, SAXException, SAXException, SAXException, SAXException, SAXException, SAXException, ParserConfigurationException {
         String request = "  <s:Body>\n"
                 + "    <Execute xmlns=\"http://schemas.microsoft.com/xrm/2011/Contracts/Services\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">\n"
                 + "      <request i:type=\"a:CreateRequest\" xmlns:a=\"http://schemas.microsoft.com/xrm/2011/Contracts\">\n"
@@ -936,6 +936,143 @@ public class OrganizationService {
                 + "                    <a:LogicalName>" + entityName + "</a:LogicalName>\n"
                 + "                    <a:Name i:nil=\"true\" />\n"
                 + "                  </b:value>\n"
+                + "                </a:KeyValuePairOfstringanyType>\n"
+                + "              </a:Attributes>\n"
+                + "              <a:EntityState i:nil=\"true\" />\n"
+                + "              <a:FormattedValues />\n"
+                + "              <a:Id>00000000-0000-0000-0000-000000000000</a:Id>\n"
+                + "              <a:LogicalName>email</a:LogicalName>\n"
+                + "              <a:RelatedEntities />\n"
+                + "            </b:value>\n"
+                + "          </a:KeyValuePairOfstringanyType>\n"
+                + "        </a:Parameters>\n"
+                + "        <a:RequestId i:nil=\"true\" />\n"
+                + "        <a:RequestName>Create</a:RequestName>\n"
+                + "      </request>\n"
+                + "    </Execute>\n"
+                + "  </s:Body>";
+
+        Document xDoc = CrmExecuteSoap.ExecuteSoapRequest(authHeader, request, crmServerUrl);
+
+        if (xDoc == null) {
+            return null;
+        }
+
+        return getAttributeValue(xDoc, "id");
+    }
+
+    /**
+     * Creates a custom email activity with a timestamp NOTE This need the
+     * custom xLiveHive solution installed in the CRM to work.
+     *
+     * @param entityName
+     * @param toId
+     * @param fromId
+     * @param subject
+     * @param body
+     * @param priority
+     * @param timestamp
+     * @return
+     */
+    public String CreateCustomEmailActivity(String entityName, String toId, String fromId, String subject, String body, int priority, Date timestamp) throws SAXException, ParserConfigurationException, Exception {
+
+        String request = "<s:Body>\n"
+                + "    <Execute xmlns=\"http://schemas.microsoft.com/xrm/2011/Contracts/Services\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">\n"
+                + "      <request i:type=\"a:CreateRequest\" xmlns:a=\"http://schemas.microsoft.com/xrm/2011/Contracts\">\n"
+                + "        <a:Parameters xmlns:b=\"http://schemas.datacontract.org/2004/07/System.Collections.Generic\">\n"
+                + "          <a:KeyValuePairOfstringanyType>\n"
+                + "            <b:key>Target</b:key>\n"
+                + "            <b:value i:type=\"a:Entity\">\n"
+                + "              <a:Attributes>\n"
+                + "                <a:KeyValuePairOfstringanyType>\n"
+                + "                  <b:key>to</b:key>\n"
+                + "                  <b:value i:type=\"a:EntityCollection\">\n"
+                + "                    <a:Entities>\n"
+                + "                      <a:Entity>\n"
+                + "                        <a:Attributes>\n"
+                + "                          <a:KeyValuePairOfstringanyType>\n"
+                + "                            <b:key>partyid</b:key>\n"
+                + "                            <b:value i:type=\"a:EntityReference\">\n"
+                + "                              <a:Id>" + toId + "</a:Id>\n"
+                + "                              <a:LogicalName>" + entityName + "</a:LogicalName>\n"
+                + "                              <a:Name i:nil=\"true\" />\n"
+                + "                            </b:value>\n"
+                + "                          </a:KeyValuePairOfstringanyType>\n"
+                + "                        </a:Attributes>\n"
+                + "                        <a:EntityState i:nil=\"true\" />\n"
+                + "                        <a:FormattedValues />\n"
+                + "                        <a:Id>00000000-0000-0000-0000-000000000000</a:Id>\n"
+                + "                        <a:LogicalName>activityparty</a:LogicalName>\n"
+                + "                        <a:RelatedEntities />\n"
+                + "                      </a:Entity>\n"
+                + "                    </a:Entities>\n"
+                + "                    <a:EntityName i:nil=\"true\" />\n"
+                + "                    <a:MinActiveRowVersion i:nil=\"true\" />\n"
+                + "                    <a:MoreRecords>false</a:MoreRecords>\n"
+                + "                    <a:PagingCookie i:nil=\"true\" />\n"
+                + "                    <a:TotalRecordCount>0</a:TotalRecordCount>\n"
+                + "                    <a:TotalRecordCountLimitExceeded>false</a:TotalRecordCountLimitExceeded>\n"
+                + "                  </b:value>\n"
+                + "                </a:KeyValuePairOfstringanyType>\n"
+                + "                <a:KeyValuePairOfstringanyType>\n"
+                + "                  <b:key>from</b:key>\n"
+                + "                  <b:value i:type=\"a:EntityCollection\">\n"
+                + "                    <a:Entities>\n"
+                + "                      <a:Entity>\n"
+                + "                        <a:Attributes>\n"
+                + "                          <a:KeyValuePairOfstringanyType>\n"
+                + "                            <b:key>partyid</b:key>\n"
+                + "                            <b:value i:type=\"a:EntityReference\">\n"
+                + "                              <a:Id>" + fromId + "</a:Id>\n"
+                + "                              <a:LogicalName>systemuser</a:LogicalName>\n"
+                + "                              <a:Name i:nil=\"true\" />\n"
+                + "                            </b:value>\n"
+                + "                          </a:KeyValuePairOfstringanyType>\n"
+                + "                        </a:Attributes>\n"
+                + "                        <a:EntityState i:nil=\"true\" />\n"
+                + "                        <a:FormattedValues />\n"
+                + "                        <a:Id>00000000-0000-0000-0000-000000000000</a:Id>\n"
+                + "                        <a:LogicalName>activityparty</a:LogicalName>\n"
+                + "                        <a:RelatedEntities />\n"
+                + "                      </a:Entity>\n"
+                + "                    </a:Entities>\n"
+                + "                    <a:EntityName i:nil=\"true\" />\n"
+                + "                    <a:MinActiveRowVersion i:nil=\"true\" />\n"
+                + "                    <a:MoreRecords>false</a:MoreRecords>\n"
+                + "                    <a:PagingCookie i:nil=\"true\" />\n"
+                + "                    <a:TotalRecordCount>0</a:TotalRecordCount>\n"
+                + "                    <a:TotalRecordCountLimitExceeded>false</a:TotalRecordCountLimitExceeded>\n"
+                + "                  </b:value>\n"
+                + "                </a:KeyValuePairOfstringanyType>\n"
+                + "                <a:KeyValuePairOfstringanyType>\n"
+                + "                  <b:key>subject</b:key>\n"
+                + "                  <b:value i:type=\"c:string\" xmlns:c=\"http://www.w3.org/2001/XMLSchema\">" + subject + "</b:value>\n"
+                + "                </a:KeyValuePairOfstringanyType>\n"
+                + "                <a:KeyValuePairOfstringanyType>\n"
+                + "                  <b:key>description</b:key>\n"
+                + "                  <b:value i:type=\"c:string\" xmlns:c=\"http://www.w3.org/2001/XMLSchema\">" + body + "</b:value>\n"
+                + "                </a:KeyValuePairOfstringanyType>\n"
+                + "                <a:KeyValuePairOfstringanyType>\n"
+                + "                  <b:key>directioncode</b:key>\n"
+                + "                  <b:value i:type=\"c:boolean\" xmlns:c=\"http://www.w3.org/2001/XMLSchema\">true</b:value>\n"
+                + "                </a:KeyValuePairOfstringanyType>\n"
+                + "                <a:KeyValuePairOfstringanyType>\n"
+                + "                  <b:key>prioritycode</b:key>\n"
+                + "                  <b:value i:type=\"a:OptionSetValue\">\n"
+                + "                    <a:Value>" + priority + "</a:Value>\n"
+                + "                  </b:value>\n"
+                + "                </a:KeyValuePairOfstringanyType>\n"
+                + "                <a:KeyValuePairOfstringanyType>\n"
+                + "                  <b:key>regardingobjectid</b:key>\n"
+                + "                  <b:value i:type=\"a:EntityReference\">\n"
+                + "                    <a:Id>" + toId + "</a:Id>\n"
+                + "                    <a:LogicalName>" + entityName + "</a:LogicalName>\n"
+                + "                    <a:Name i:nil=\"true\" />\n"
+                + "                  </b:value>\n"
+                + "                </a:KeyValuePairOfstringanyType>\n"
+                + "                <a:KeyValuePairOfstringanyType>\n"
+                + "                  <b:key>xrm_timestamp</b:key>\n"
+                + "                  <b:value i:type=\"c:dateTime\" xmlns:c=\"http://www.w3.org/2001/XMLSchema\">" + DATE_FORMAT.format(timestamp) + "</b:value>\n"
                 + "                </a:KeyValuePairOfstringanyType>\n"
                 + "              </a:Attributes>\n"
                 + "              <a:EntityState i:nil=\"true\" />\n"
@@ -1333,7 +1470,9 @@ public class OrganizationService {
     }
 
     /**
-     * Returns true if the solution with the given name exists or false otherwise
+     * Returns true if the solution with the given name exists or false
+     * otherwise
+     *
      * @param solutionName
      * @return true or false
      * @throws SAXException
@@ -1341,7 +1480,7 @@ public class OrganizationService {
      * @throws Exception
      */
     public boolean hasSolutionInstalled(String solutionName) throws SAXException, ParserConfigurationException, Exception {
-        
+
         String request = "  <s:Body>\n"
                 + "    <Execute xmlns=\"http://schemas.microsoft.com/xrm/2011/Contracts/Services\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">\n"
                 + "      <request i:type=\"a:RetrieveMultipleRequest\" xmlns:a=\"http://schemas.microsoft.com/xrm/2011/Contracts\">\n"
@@ -1385,9 +1524,9 @@ public class OrganizationService {
                 + "      </request>\n"
                 + "    </Execute>\n"
                 + "  </s:Body>";
-        
+
         Document xDoc = executeRequest(request);
-        
+
         Node node = getValueOfNodeWithName(":Entities", xDoc.getFirstChild());
 
         if (node == null) {
@@ -1396,9 +1535,10 @@ public class OrganizationService {
 
         return node.getChildNodes().getLength() > 0;
     }
-    
+
     /**
      * Executes a SOAP request sending the request and the authHeader.
+     *
      * @param request
      * @return an XML Document with the response
      * @throws SAXException
