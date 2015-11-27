@@ -76,6 +76,10 @@ public class LiveHiveAction extends BaseEntity {
         ATTACHMENTS_LIST
 
     };
+    
+    private static final int RECIPIENT_MAX_LENGTH = 100;
+    private static final int BODY_MAX_LENGTH = 7000;
+    private static final int SUBJECT_MAX_LENGTH = 50;
 
     public class ActionType {
 
@@ -151,7 +155,7 @@ public class LiveHiveAction extends BaseEntity {
                 setAttachmentPageViews(Integer.parseInt(value));
                 break;
             }
-            
+
             case ATTACHMENTS_LIST: {
                 setAttachmentList(value);
                 break;
@@ -216,8 +220,8 @@ public class LiveHiveAction extends BaseEntity {
         if (getOpportunityId() != null) {
             parameters.add(getOpportunityId());
         }
-        
-        if (getAttachmentList()!= null) {
+
+        if (getAttachmentList() != null) {
             parameters.add(getAttachmentList());
         }
 
@@ -256,12 +260,21 @@ public class LiveHiveAction extends BaseEntity {
     }
 
     /**
+     * Comma separated list of recipient email addresses. If the string length
+     * is >100, truncate and append "..." at the end
+     *
      * @param listOfRecipientEmailAddresses the listOfRecipientEmailAddresses to
      * set
      */
     public void setListOfRecipientEmailAddresses(String listOfRecipientEmailAddresses) {
+
+        if (listOfRecipientEmailAddresses.length() > RECIPIENT_MAX_LENGTH) {
+            listOfRecipientEmailAddresses = listOfRecipientEmailAddresses.substring(0, Math.min(listOfRecipientEmailAddresses.length(), RECIPIENT_MAX_LENGTH)) + "...";
+        }
+
         this.listOfRecipientEmailAddresses = new CrmString(LIST_OF_RECIPIENT_EMAIL_ADDRESSES, listOfRecipientEmailAddresses);
     }
+    
 
     /**
      * @return the emailBody
@@ -271,11 +284,18 @@ public class LiveHiveAction extends BaseEntity {
     }
 
     /**
+     * Body of the email. Length>7000 chars? append "..."
      * @param emailBody the emailBody to set
      */
     public void setEmailBody(String emailBody) {
+        
+        if (emailBody.length() > BODY_MAX_LENGTH) {
+            emailBody = emailBody.substring(0, Math.min(emailBody.length(), BODY_MAX_LENGTH)) + "...";
+        }
+        
         this.emailBody = new CrmString(EMAIL_BODY, emailBody);
     }
+
 
     /**
      * @return the emailSubject
@@ -285,11 +305,18 @@ public class LiveHiveAction extends BaseEntity {
     }
 
     /**
+     * Subject line. Truncate after 50 chars
      * @param emailSubject the emailSubject to set
      */
     public void setEmailSubject(String emailSubject) {
+        
+        if (emailSubject.length() > SUBJECT_MAX_LENGTH) {
+            emailSubject = emailSubject.substring(0, Math.min(emailSubject.length(), SUBJECT_MAX_LENGTH)) + "...";
+        }
+
         this.emailSubject = new CrmString(EMAIL_SUBJECT, emailSubject);
     }
+    
 
     /**
      * @return the emailSender
