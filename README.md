@@ -20,7 +20,7 @@ Getting the current User Id
 
         String userId = service.WhoAmIRequest();
 		
- Creating a LiveHive Contact
+ Creating a LiveHive Contact (for leads use LiveHiveLead)
  
         LiveHiveContact liveHiveContact = new LiveHiveContact();
         
@@ -36,6 +36,9 @@ Getting the current User Id
         liveHiveContact.setXrmLiveHiveMetric(4);
         liveHiveContact.setXrmLiveHiveState("STATE");
         liveHiveContact.setXrmLiveHiveChangeInScore(3.5);
+        liveHiveContact.setEngagementDisplayOnly("4.0 out of 5"); - This should be calculated from the previous values
+        liveHiveContact.setRecentChangeDisplayOnly("890.0%"); - This should be calculated from the previous values
+        liveHiveContact.setLeadsourcecode(Lead.LeadSourceCode.LiveHive);
         
         Calendar cal = Calendar.getInstance();
         
@@ -115,3 +118,30 @@ Retrieving all entities and building them
         Document NoteDocument = service.RetrieveAll(EntityName.Annotation, Note.NoteColumns, null);
         EntityFactory entityFactory = new EntityFactory<>(Note.class);
         ArrayList<Note> notes = entityFactory.Build(NoteDocument);
+		
+Creating LiveHive Actions
+
+        LiveHiveAction liveHiveAction = new LiveHiveAction();
+        liveHiveAction.setName("Test Action complete");
+        liveHiveAction.setListOfRecipientEmailAddresses("email1@xrm.com, email1@xrm.com, email1@xrm.com, email1@xrm.com");
+        liveHiveAction.setEmailBody("body");
+        liveHiveAction.setEmailSubject("Email Subject");
+        liveHiveAction.setEmailSender("rodolfo@xrm.com");
+        liveHiveAction.setActionType(LiveHiveAction.ActionType.Email);
+        liveHiveAction.setActionDate(cal.getTime());
+        liveHiveAction.setLocation("California");
+        liveHiveAction.setAttachmentList("document.docx, errorlist.xlsx");
+        liveHiveAction.setAttachmentPageViews(950);
+        liveHiveAction.setLeadId(lead.getId());
+        liveHiveAction.setId(service.Create(liveHiveAction.toEntity()));
+        
+        System.out.println("liveHiveAction " + liveHiveAction.getId());
+		
+#ChangeLog
+	
+Added the following methods to the entities LiveHIveContact and LiveHiveLead
+
+        liveHiveContact.setEngagementDisplayOnly("4.0 out of 5"); - This should be calculated from the previous values
+        liveHiveContact.setRecentChangeDisplayOnly("890.0%"); - This should be calculated from the previous values
+		
+Added LiveHiveActions
