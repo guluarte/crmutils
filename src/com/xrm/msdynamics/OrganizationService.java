@@ -411,7 +411,7 @@ public class OrganizationService {
         }
         return contacts;
     }
-
+    
     /**
      * Retrieves the contact that match the full name
      *

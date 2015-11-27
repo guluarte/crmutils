@@ -239,6 +239,7 @@ public class Lead extends BaseEntity {
         public static final int Web = 8;
         public static final int WordOfMouth = 9;
         public static final int Other = 10;
+        public static final int LiveHive = 163650000; /* Only Works with the custom solution installed */
     }
 
     public static final String OpenAndNew = "Open - New";

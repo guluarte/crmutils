@@ -34,6 +34,7 @@ public class LiveHiveAction extends BaseEntity {
     private CrmString emailSubject;
     private CrmString emailSender;
     private CrmString location;
+    private CrmString attachmentList;
 
     private DateTime actionDate;
 
@@ -57,6 +58,7 @@ public class LiveHiveAction extends BaseEntity {
     public static final String OPPORTUNITY_ID = "xrm_opportunityid";
     public static final String CONTACT_ID = "xrm_contactid";
     public static final String ATTACHMENT_PAGE_VIEWS = "xrm_attachmentpageviews";
+    public static final String ATTACHMENTS_LIST = "xrm_attachmentlist";
 
     public static String[] DefaultColumns = new String[]{
         NAME,
@@ -70,7 +72,8 @@ public class LiveHiveAction extends BaseEntity {
         LEAD_ID,
         OPPORTUNITY_ID,
         CONTACT_ID,
-        ATTACHMENT_PAGE_VIEWS
+        ATTACHMENT_PAGE_VIEWS,
+        ATTACHMENTS_LIST
 
     };
 
@@ -148,6 +151,11 @@ public class LiveHiveAction extends BaseEntity {
                 setAttachmentPageViews(Integer.parseInt(value));
                 break;
             }
+            
+            case ATTACHMENTS_LIST: {
+                setAttachmentList(value);
+                break;
+            }
         }
     }
 
@@ -207,6 +215,10 @@ public class LiveHiveAction extends BaseEntity {
 
         if (getOpportunityId() != null) {
             parameters.add(getOpportunityId());
+        }
+        
+        if (getAttachmentList()!= null) {
+            parameters.add(getAttachmentList());
         }
 
         return parameters;
@@ -389,6 +401,20 @@ public class LiveHiveAction extends BaseEntity {
      */
     public void setOpportunityId(String opportunityId) {
         this.opportunityId = new EntityReference(EntityName.Opportunity, OPPORTUNITY_ID, opportunityId);
+    }
+
+    /**
+     * @return the attachmentList
+     */
+    public CrmString getAttachmentList() {
+        return attachmentList;
+    }
+
+    /**
+     * @param attachmentList the attachmentList to set
+     */
+    public void setAttachmentList(String attachmentList) {
+        this.attachmentList = new CrmString(ATTACHMENTS_LIST, attachmentList);
     }
 
 }

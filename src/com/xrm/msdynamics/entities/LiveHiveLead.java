@@ -33,6 +33,9 @@ public class LiveHiveLead extends Lead {
 
     private CrmString xrmLiveHiveState;
 
+    private CrmString engagementDisplayOnly;
+    private CrmString recentChangeDisplayOnly;
+
     private CrmDouble xrmLiveHiveClosingScore;
     private CrmDouble xrmLiveHiveScore;
     private CrmDouble xrmLiveHiveChangeInScore;
@@ -53,6 +56,9 @@ public class LiveHiveLead extends Lead {
     public static final String XRM_LIVEHIVE_LAST_VIEW_ON = "xrm_livehivelastviewon";
     public static final String XRM_LIVEHIVE_LAST_SHARE_ON = "xrm_livehivelastshareon";
 
+    public static final String ENGAGEMENT_DISPLAY = "xrm_engagementdisplayonly";
+    public static final String RECENT_CHANGE_DISPLAY = "xrm_recentchangedisplayonly";
+
     public static String[] LiveHiveLeadColumns = new String[]{
         XRM_LIVEHIVE_CHANGE_IN_METRIC,
         XRM_LIVEHIVE_LAST_VIEW,
@@ -64,7 +70,9 @@ public class LiveHiveLead extends Lead {
         XRM_LIVEHIVE_SCORE,
         XRM_LIVEHIVE_CHANGE_IN_SCORE,
         XRM_LIVEHIVE_LAST_VIEW_ON,
-        XRM_LIVEHIVE_LAST_SHARE_ON
+        XRM_LIVEHIVE_LAST_SHARE_ON,
+        ENGAGEMENT_DISPLAY,
+        RECENT_CHANGE_DISPLAY
     };
 
     public LiveHiveLead(NodeList nodes) {
@@ -112,6 +120,16 @@ public class LiveHiveLead extends Lead {
 
             case XRM_LIVEHIVE_STATE: {
                 setXrmLiveHiveState(value);
+                break;
+            }
+
+            case ENGAGEMENT_DISPLAY: {
+                setEngagementDisplayOnly(value);
+                break;
+            }
+
+            case RECENT_CHANGE_DISPLAY: {
+                setRecentChangeDisplayOnly(value);
                 break;
             }
 
@@ -206,6 +224,14 @@ public class LiveHiveLead extends Lead {
 
         if (getXrmLiveHiveLastView() != null) {
             parameters.add(getXrmLiveHiveLastView());
+        }
+
+        if (getRecentChangeDisplayOnly() != null) {
+            parameters.add(getRecentChangeDisplayOnly());
+        }
+
+        if (getEngagementDisplayOnly() != null) {
+            parameters.add(getEngagementDisplayOnly());
         }
 
         return parameters;
@@ -363,5 +389,33 @@ public class LiveHiveLead extends Lead {
      */
     public void setXrmLiveHiveLastView(int xrmLiveHiveLastView) {
         this.xrmLiveHiveLastView = new CrmInt(XRM_LIVEHIVE_LAST_VIEW, xrmLiveHiveLastView);
+    }
+
+    /**
+     * @return the engagementDisplayOnly
+     */
+    public CrmString getEngagementDisplayOnly() {
+        return engagementDisplayOnly;
+    }
+
+    /**
+     * @param engagementDisplayOnly the engagementDisplayOnly to set
+     */
+    public void setEngagementDisplayOnly(String engagementDisplayOnly) {
+        this.engagementDisplayOnly = new CrmString(ENGAGEMENT_DISPLAY, engagementDisplayOnly);
+    }
+
+    /**
+     * @return the recentChangeDisplayOnly
+     */
+    public CrmString getRecentChangeDisplayOnly() {
+        return recentChangeDisplayOnly;
+    }
+
+    /**
+     * @param recentChangeDisplayOnly the recentChangeDisplayOnly to set
+     */
+    public void setRecentChangeDisplayOnly(String recentChangeDisplayOnly) {
+        this.recentChangeDisplayOnly = new CrmString(RECENT_CHANGE_DISPLAY, recentChangeDisplayOnly);
     }
 }
