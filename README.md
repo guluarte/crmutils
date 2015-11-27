@@ -137,6 +137,14 @@ Creating LiveHive Actions
         
         System.out.println("liveHiveAction " + liveHiveAction.getId());
 		
+Updating LiveHive Actions
+Updating LiveHive Actions is the same as the other entities.
+		
+        LiveHiveAction liveHiveAction = new LiveHiveAction();
+        liveHiveAction.setId("b17cbea7-4395-e511-80d4-00155d026854");
+        liveHiveAction.setName("Test Action Update");
+        service.Update(liveHiveAction.toEntity());
+		
 #ChangeLog
 	
 Added the following methods to the entities LiveHIveContact and LiveHiveLead
