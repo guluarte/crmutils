@@ -132,8 +132,9 @@ public class Enums {
         public static final int ProductBundle = 3;
 
     }
-    
+
     public class EmailPriority {
+
         public static final int Low = 0;
         public static final int Normal = 1;
         public static final int High = 2;
@@ -170,7 +171,8 @@ public class Enums {
         public static final String Article = "";
         public static String BusinnesUnit;
         public static final String Organization = "organization";
-         public static final String  Appointment = "appointment";
+        public static final String Appointment = "appointment";
+        public static final String LiveHiveAction = "xrm_livehiveaction";
     }
 
     public static class EntityPluralName {
