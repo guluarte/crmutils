@@ -46,6 +46,7 @@ public class LiveHiveAction extends BaseEntity {
     private EntityReference contactId;
     private EntityReference opportunityId;
 
+    public static final String ID = "xrm_livehiveactionid";
     public static final String NAME = "xrm_name";
     public static final String LIST_OF_RECIPIENT_EMAIL_ADDRESSES = "xrm_listofrecipientemailaddresses";
     public static final String EMAIL_BODY = "xrm_emailbody";
@@ -103,6 +104,12 @@ public class LiveHiveAction extends BaseEntity {
     @Override
     public void setAttribute(String key, String value, String logicalName) {
         switch (key) {
+            
+            case ID: {
+                setId(value);
+                break;
+            }
+            
             case NAME: {
                 setName(value);
                 break;

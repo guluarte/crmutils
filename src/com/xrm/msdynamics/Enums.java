@@ -173,6 +173,7 @@ public class Enums {
         public static final String Organization = "organization";
         public static final String Appointment = "appointment";
         public static final String LiveHiveAction = "xrm_livehiveaction";
+        public static final String Task = "task";
     }
 
     public static class EntityPluralName {
