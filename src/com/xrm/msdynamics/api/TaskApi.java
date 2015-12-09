@@ -63,6 +63,7 @@ public class TaskApi {
      * Creates a new LiveHiveTask
      *
      * @param subject
+     * @param description
      * @param time
      * @param status
      * @param prospectId
@@ -73,12 +74,16 @@ public class TaskApi {
      * @throws ParserConfigurationException
      * @throws Exception
      */
-    public String create(String subject, Date time, String status, String prospectId, String prospectEntityName, int taskType) throws SAXException, ParserConfigurationException, Exception {
+    public String create(String subject, String description, Date time, String status, String prospectId, String prospectEntityName, int taskType) throws SAXException, ParserConfigurationException, Exception {
 
         LiveHiveTask task = new LiveHiveTask();
 
         if (subject != null) {
             task.setSubject(subject);
+        }
+        
+        if (description != null) {
+            task.setDescription(description);
         }
 
         if (time != null) {
@@ -161,6 +166,7 @@ public class TaskApi {
      *
      * @param taskId
      * @param subject
+     * @param description
      * @param time
      * @param status
      * @param prospectId
@@ -170,7 +176,7 @@ public class TaskApi {
      * @throws ParserConfigurationException
      * @throws Exception
      */
-    public String update(String taskId, String subject, Date time, String status, String prospectId, String prospectEntityName) throws SAXException, ParserConfigurationException, Exception {
+    public String update(String taskId, String subject, String description, Date time, String status, String prospectId, String prospectEntityName) throws SAXException, ParserConfigurationException, Exception {
 
         LiveHiveTask task = new LiveHiveTask();
 
@@ -178,6 +184,10 @@ public class TaskApi {
 
         if (subject != null) {
             task.setSubject(subject);
+        }
+        
+        if (description != null) {
+            task.setDescription(description);
         }
 
         if (time != null) {
