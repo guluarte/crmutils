@@ -145,6 +145,56 @@ Updating LiveHive Actions is the same as the other entities.
         liveHiveAction.setName("Test Action Update");
         service.Update(liveHiveAction.toEntity());
 		
+TaskApi
+        Document leadResponseDocument = service.RetrieveAll(EntityName.Lead, Lead.LeadColumns, null);
+        EntityFactory entityFactory = new EntityFactory<>(Lead.class);
+        ArrayList<Lead> leads = entityFactory.Build(leadResponseDocument);
+        
+        String leadId = leads.get(0).getId();
+        String leadEmail = leads.get(0).getEmailaddress1().toString();
+        
+        //We pass the OrganizationService to the TaskApi
+        TaskApi taskApi = new TaskApi(service);
+        
+        // If we want to retrieve all the taks on the CRM
+        ArrayList<LiveHiveTask> tasks = taskApi.retrieveAll();
+
+        // Retrieving a single task by Id
+        LiveHiveTask singleTask = taskApi.retrieveSingle(tasks.get(0).getId());
+        
+        //Retrieving a task by a lead or contact id
+        ArrayList<LiveHiveTask> taskRegardingLeadId = taskApi.retrieveByRegardingObjectId(leadId);
+        
+        //Retrieving a task by a lead email
+        ArrayList<LiveHiveTask> taskByLeadEmail = taskApi.retrieveByLeadEmail(leadEmail);
+                
+        Calendar cal = Calendar.getInstance();
+        //Creating a task
+        String taskId = taskApi.create("Test Subject 2", cal.getTime(), TaskApi.TaskStatus.OpenAndInProgress, leadId, EntityName.Lead, LiveHiveTask.TaskTypes.Email);
+        
+        // Updating a task - Note a task marked as completed or canceled cannot be updated.
+        taskApi.update(taskId, "New Subject 2", cal.getTime(), null, leadId, EntityName.Lead);
+        
+        // Deleting task, we can use a comma delimited list or just pass a single id
+        taskApi.delete(taskId);
+		
+Task
+        We can also create/update/delete tasks as we do with the other entities.
+        
+        //Sample creating a new Task
+        Task task = new Task();
+        
+        task.setSubject("Test subject 2");
+        task.setDescription("Test description 2");
+        task.setOwnerId(userId);
+        task.setActualDurationMinutes(30);
+        task.setScheduledEnd(cal.getTime());
+        task.setPriorityCode(Task.PriorityCodes.High);
+        task.setRegardingObjectId(leads.get(0).getLogicalName(), leads.get(0).getId());
+        task.setId(service.Create(task.toEntity()));
+        
+        //Changing the task status
+        service.SetStateRequest(task.toEntityReference(), task.getStatusCompleted());
 #ChangeLog
 	
 Added the following methods to the entities LiveHIveContact and LiveHiveLead
@@ -153,3 +203,5 @@ Added the following methods to the entities LiveHIveContact and LiveHiveLead
         liveHiveContact.setRecentChangeDisplayOnly("890.0%"); - This should be calculated from the previous values
 		
 Added LiveHiveActions
+Added Task, LiveHiveTask and TaskApi
+Added setAttachmentPageviewsDisplay() and getAttachmentPageviewsDisplay() to LiveHiveAction

@@ -35,6 +35,7 @@ public class LiveHiveAction extends BaseEntity {
     private CrmString emailSender;
     private CrmString location;
     private CrmString attachmentList;
+    private CrmString attachmentPageviewsDisplay;
 
     private DateTime actionDate;
 
@@ -59,6 +60,7 @@ public class LiveHiveAction extends BaseEntity {
     public static final String OPPORTUNITY_ID = "xrm_opportunityid";
     public static final String CONTACT_ID = "xrm_contactid";
     public static final String ATTACHMENT_PAGE_VIEWS = "xrm_attachmentpageviews";
+    public static final String ATTACHMENT_PAGE_VIEWS_DISPLAY = "xrm_attachmentpageviewsdisplay";
     public static final String ATTACHMENTS_LIST = "xrm_attachmentlist";
 
     public static String[] DefaultColumns = new String[]{
@@ -74,6 +76,7 @@ public class LiveHiveAction extends BaseEntity {
         OPPORTUNITY_ID,
         CONTACT_ID,
         ATTACHMENT_PAGE_VIEWS,
+        ATTACHMENT_PAGE_VIEWS_DISPLAY,
         ATTACHMENTS_LIST
 
     };
@@ -167,6 +170,12 @@ public class LiveHiveAction extends BaseEntity {
                 setAttachmentList(value);
                 break;
             }
+            
+            case ATTACHMENT_PAGE_VIEWS_DISPLAY: {
+                setAttachmentPageviewsDisplay(value);
+                break;
+            }
+            
         }
     }
 
@@ -230,6 +239,10 @@ public class LiveHiveAction extends BaseEntity {
 
         if (getAttachmentList() != null) {
             parameters.add(getAttachmentList());
+        }
+        
+        if(getAttachmentPageviewsDisplay() != null) {
+            parameters.add(getAttachmentPageviewsDisplay());
         }
 
         return parameters;
@@ -449,6 +462,20 @@ public class LiveHiveAction extends BaseEntity {
      */
     public void setAttachmentList(String attachmentList) {
         this.attachmentList = new CrmString(ATTACHMENTS_LIST, attachmentList);
+    }
+
+    /**
+     * @return the attachmentPageviewsDisplay
+     */
+    public CrmString getAttachmentPageviewsDisplay() {
+        return attachmentPageviewsDisplay;
+    }
+
+    /**
+     * @param attachmentPageviewsDisplay the attachmentPageviewsDisplay to set
+     */
+    public void setAttachmentPageviewsDisplay(String attachmentPageviewsDisplay) {
+        this.attachmentPageviewsDisplay = new CrmString(ATTACHMENT_PAGE_VIEWS_DISPLAY, attachmentPageviewsDisplay);
     }
 
 }
