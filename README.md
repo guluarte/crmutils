@@ -146,6 +146,7 @@ Updating LiveHive Actions is the same as the other entities.
         service.Update(liveHiveAction.toEntity());
 		
 TaskApi
+
         Document leadResponseDocument = service.RetrieveAll(EntityName.Lead, Lead.LeadColumns, null);
         EntityFactory entityFactory = new EntityFactory<>(Lead.class);
         ArrayList<Lead> leads = entityFactory.Build(leadResponseDocument);
@@ -203,5 +204,7 @@ Added the following methods to the entities LiveHIveContact and LiveHiveLead
         liveHiveContact.setRecentChangeDisplayOnly("890.0%"); - This should be calculated from the previous values
 		
 Added LiveHiveActions
+
 Added Task, LiveHiveTask and TaskApi
+
 Added setAttachmentPageviewsDisplay() and getAttachmentPageviewsDisplay() to LiveHiveAction
