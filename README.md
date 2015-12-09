@@ -180,6 +180,7 @@ TaskApi
         taskApi.delete(taskId);
 		
 Task
+
         We can also create/update/delete tasks as we do with the other entities.
         
         //Sample creating a new Task
