@@ -14,9 +14,7 @@ import java.util.ArrayList;
  */
 public class Email extends BaseEntity {
 
-    private final Entity entity = new Entity(EntityName.Email);
-    
-    
+    private Entity entity;
 
     @Override
     public void setAttribute(String key, String value, String logicalName) {
@@ -31,12 +29,17 @@ public class Email extends BaseEntity {
     @Override
     protected ArrayList<XmlSerializable> getAttributeCollection() {
         ArrayList<XmlSerializable> ops = new ArrayList<>();
-        
+
         return ops;
     }
 
     @Override
     protected Entity getEntity() {
+
+        if (entity == null) {
+            entity = new Entity(EntityName.Email);
+        }
+        
         return entity;
     }
 

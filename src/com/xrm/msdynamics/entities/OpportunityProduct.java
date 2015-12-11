@@ -40,7 +40,7 @@ public class OpportunityProduct extends BaseProduct {
     private CrmBoolean isProductOverridden;
     private CrmBoolean isPriceOverridden;
 
-    private final Entity entity = new Entity(EntityName.OpportunityProduct);
+    private Entity entity;
 
     public static final String ID_COLUMN = "opportunityproductid";
     public static final String LINEITEMNUMBER_COLUMN = "lineitemnumber";
@@ -202,6 +202,10 @@ public class OpportunityProduct extends BaseProduct {
 
     @Override
     protected Entity getEntity() {
+        
+        if (entity == null) {
+            entity = new Entity(EntityName.OpportunityProduct);
+        }
         return entity;
     }
 

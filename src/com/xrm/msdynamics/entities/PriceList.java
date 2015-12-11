@@ -22,7 +22,7 @@ import org.w3c.dom.NodeList;
  */
 public class PriceList extends BaseEntity {
 
-    private Entity entity = new Entity(EntityName.PriceList);
+    private Entity entity;
 
     private CrmString name;
     private CrmString description;
@@ -105,6 +105,11 @@ public class PriceList extends BaseEntity {
 
     @Override
     protected Entity getEntity() {
+
+        if (entity == null) {
+            entity = new Entity(EntityName.PriceList);
+        }
+
         return entity;
     }
 

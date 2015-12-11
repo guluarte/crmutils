@@ -21,7 +21,7 @@ import org.w3c.dom.NodeList;
  */
 public class User extends BaseEntity {
 
-    private final Entity entity = new Entity(EntityName.SystemUser);
+    private Entity entity;
 
     private DateTime createdOn;
     private CrmString firstName;
@@ -102,6 +102,11 @@ public class User extends BaseEntity {
 
     @Override
     protected Entity getEntity() {
+        
+        if (entity == null) {
+            entity = new Entity(EntityName.SystemUser);
+        }
+        
         return entity;
     }
 

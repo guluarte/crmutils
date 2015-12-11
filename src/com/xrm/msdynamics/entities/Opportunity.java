@@ -24,9 +24,9 @@ import org.w3c.dom.NodeList;
  */
 public class Opportunity extends BaseEntity {
 
-    private final Entity entity = new Entity(Enums.EntityName.Opportunity);
+    private Entity entity;
 
-    private ArrayList<OpportunityProduct> opportunityProducts = new ArrayList<>();
+    private ArrayList<OpportunityProduct> opportunityProducts;
 
     public void addOpportunityProduct(OpportunityProduct opportunityProduct) {
         int idx = opportunityProducts.indexOf(opportunityProduct);
@@ -129,11 +129,13 @@ public class Opportunity extends BaseEntity {
     };
 
     public Opportunity() {
+        this.opportunityProducts = new ArrayList<>();
 
     }
 
     public Opportunity(NodeList documentAttributes) {
         super(documentAttributes);
+        this.opportunityProducts = new ArrayList<>();
     }
 
     @Override
@@ -330,6 +332,11 @@ public class Opportunity extends BaseEntity {
 
     @Override
     protected Entity getEntity() {
+
+        if (entity == null) {
+            entity = new Entity(EntityName.Opportunity);
+        }
+
         return entity;
     }
 

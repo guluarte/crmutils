@@ -15,7 +15,7 @@ import org.w3c.dom.NodeList;
  */
 public class CustomerAddress extends BaseEntity {
 
-    private Entity entity = new Entity(EntityName.CustomerAddress);
+    private Entity entity;
 
     public CustomerAddress() {
 
@@ -24,7 +24,7 @@ public class CustomerAddress extends BaseEntity {
     public CustomerAddress(NodeList documentAttributes) {
         super(documentAttributes);
     }
-    
+
     public static String[] CustomerAddressColumns = new String[]{
         "line1",
         "line2",
@@ -55,6 +55,11 @@ public class CustomerAddress extends BaseEntity {
 
     @Override
     protected Entity getEntity() {
+
+        if (entity == null) {
+            entity = new Entity(EntityName.CustomerAddress);
+        }
+
         return entity;
     }
 

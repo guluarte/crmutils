@@ -28,7 +28,7 @@ import org.w3c.dom.NodeList;
  */
 public class Lead extends BaseEntity {
 
-    Entity entity = new Entity(EntityName.Lead);
+    Entity entity;
 
     private CrmString subject;
     private CrmString firstname;
@@ -131,10 +131,9 @@ public class Lead extends BaseEntity {
     public static final String BUDGETAMOUNT_COLUMN = "budgetamount";
     public static final String PURCHASEPROCESS_COLUMN = "purchaseprocess";
     public static final String DECISIONMAKER_COLUMN = "decisionmaker";
-    
-   
 
     public static String[] LeadColumns = new String[]{
+        ID_COLUMN,
         SUBJECT_COLUMN,
         FIRSTNAME_COLUMN,
         LASTNAME_COLUMN,
@@ -240,6 +239,7 @@ public class Lead extends BaseEntity {
         public static final int WordOfMouth = 9;
         public static final int Other = 10;
         public static final int LiveHive = 163650000; /* Only Works with the custom solution installed */
+
     }
 
     public static final String OpenAndNew = "Open - New";
@@ -664,6 +664,11 @@ public class Lead extends BaseEntity {
 
     @Override
     protected Entity getEntity() {
+        
+        if (entity == null) {
+            entity = new Entity(EntityName.Lead);
+        }
+        
         return entity;
     }
 
@@ -1377,5 +1382,5 @@ public class Lead extends BaseEntity {
     public void setBudgetamount(BigDecimal budgetamount) {
         this.budgetamount = new Money(BUDGETAMOUNT_COLUMN, budgetamount);
     }
-    
+
 }

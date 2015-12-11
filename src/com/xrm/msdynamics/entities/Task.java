@@ -27,7 +27,7 @@ import org.w3c.dom.NodeList;
  */
 public class Task extends BaseEntity {
 
-    Entity entity = new Entity(Enums.EntityName.Task);
+    Entity entity;
 
     private CrmString subject;
     private CrmString description;
@@ -220,6 +220,10 @@ public class Task extends BaseEntity {
 
     @Override
     protected Entity getEntity() {
+
+        if (entity == null) {
+            entity = new Entity(Enums.EntityName.Task);
+        }
         return entity;
     }
 

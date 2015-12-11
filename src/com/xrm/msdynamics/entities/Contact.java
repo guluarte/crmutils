@@ -26,7 +26,7 @@ import org.w3c.dom.NodeList;
  */
 public class Contact extends BaseEntity {
 
-    Entity entity = new Entity(Enums.EntityName.Contact);
+    Entity entity;
 
     private DateTime createdon;
     private DateTime modifiedon;
@@ -399,6 +399,10 @@ public class Contact extends BaseEntity {
 
     @Override
     protected Entity getEntity() {
+        
+        if (entity == null) {
+            entity = new Entity(EntityName.Contact);
+        }
         return entity;
     }
 

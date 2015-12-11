@@ -26,7 +26,7 @@ import org.w3c.dom.NodeList;
  */
 public class LiveHiveAction extends BaseEntity {
 
-    Entity entity = new Entity(EntityName.LiveHiveAction);
+    Entity entity;
 
     private CrmString name;
     private CrmString listOfRecipientEmailAddresses;
@@ -80,7 +80,7 @@ public class LiveHiveAction extends BaseEntity {
         ATTACHMENTS_LIST
 
     };
-    
+
     private static final int RECIPIENT_MAX_LENGTH = 100;
     private static final int BODY_MAX_LENGTH = 7000;
     private static final int SUBJECT_MAX_LENGTH = 50;
@@ -107,12 +107,12 @@ public class LiveHiveAction extends BaseEntity {
     @Override
     public void setAttribute(String key, String value, String logicalName) {
         switch (key) {
-            
+
             case ID: {
                 setId(value);
                 break;
             }
-            
+
             case NAME: {
                 setName(value);
                 break;
@@ -170,12 +170,12 @@ public class LiveHiveAction extends BaseEntity {
                 setAttachmentList(value);
                 break;
             }
-            
+
             case ATTACHMENT_PAGE_VIEWS_DISPLAY: {
                 setAttachmentPageviewsDisplay(value);
                 break;
             }
-            
+
         }
     }
 
@@ -240,8 +240,8 @@ public class LiveHiveAction extends BaseEntity {
         if (getAttachmentList() != null) {
             parameters.add(getAttachmentList());
         }
-        
-        if(getAttachmentPageviewsDisplay() != null) {
+
+        if (getAttachmentPageviewsDisplay() != null) {
             parameters.add(getAttachmentPageviewsDisplay());
         }
 
@@ -250,6 +250,11 @@ public class LiveHiveAction extends BaseEntity {
 
     @Override
     protected Entity getEntity() {
+
+        if (entity == null) {
+            entity = new Entity(EntityName.LiveHiveAction);
+        }
+        
         return entity;
     }
 
@@ -294,7 +299,6 @@ public class LiveHiveAction extends BaseEntity {
 
         this.listOfRecipientEmailAddresses = new CrmString(LIST_OF_RECIPIENT_EMAIL_ADDRESSES, listOfRecipientEmailAddresses);
     }
-    
 
     /**
      * @return the emailBody
@@ -305,17 +309,17 @@ public class LiveHiveAction extends BaseEntity {
 
     /**
      * Body of the email. Length>7000 chars? append "..."
+     *
      * @param emailBody the emailBody to set
      */
     public void setEmailBody(String emailBody) {
-        
+
         if (emailBody.length() > BODY_MAX_LENGTH) {
             emailBody = emailBody.substring(0, Math.min(emailBody.length(), BODY_MAX_LENGTH)) + "...";
         }
-        
+
         this.emailBody = new CrmString(EMAIL_BODY, emailBody);
     }
-
 
     /**
      * @return the emailSubject
@@ -326,17 +330,17 @@ public class LiveHiveAction extends BaseEntity {
 
     /**
      * Subject line. Truncate after 50 chars
+     *
      * @param emailSubject the emailSubject to set
      */
     public void setEmailSubject(String emailSubject) {
-        
+
         if (emailSubject.length() > SUBJECT_MAX_LENGTH) {
             emailSubject = emailSubject.substring(0, Math.min(emailSubject.length(), SUBJECT_MAX_LENGTH)) + "...";
         }
 
         this.emailSubject = new CrmString(EMAIL_SUBJECT, emailSubject);
     }
-    
 
     /**
      * @return the emailSender

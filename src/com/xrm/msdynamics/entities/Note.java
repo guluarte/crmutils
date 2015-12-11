@@ -26,7 +26,7 @@ import org.w3c.dom.NodeList;
  */
 public class Note extends BaseEntity {
 
-    private final Entity entity = new Entity(EntityName.Annotation);
+    private Entity entity;
 
     private EntityReference createdBy;
     private EntityReference objectId;
@@ -175,20 +175,20 @@ public class Note extends BaseEntity {
                 break;
             }
             case CREATEDON: {
-            try {
-                setCreatedOn(DATE_FORMAT.parse(value));
-                break;
-            } catch (ParseException ex) {
-                Logger.getLogger(Note.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                try {
+                    setCreatedOn(DATE_FORMAT.parse(value));
+                    break;
+                } catch (ParseException ex) {
+                    Logger.getLogger(Note.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
             case MODIFIEDON: {
-            try {
-                setModifiedOn(DATE_FORMAT.parse(value));
-                break;
-            } catch (ParseException ex) {
-                Logger.getLogger(Note.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                try {
+                    setModifiedOn(DATE_FORMAT.parse(value));
+                    break;
+                } catch (ParseException ex) {
+                    Logger.getLogger(Note.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
 
         }
@@ -248,6 +248,10 @@ public class Note extends BaseEntity {
 
     @Override
     protected Entity getEntity() {
+        
+        if (entity == null) {
+            entity = new Entity(EntityName.Annotation);
+        }
         return entity;
     }
 

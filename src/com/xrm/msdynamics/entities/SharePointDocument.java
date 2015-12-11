@@ -26,7 +26,7 @@ import org.w3c.dom.NodeList;
  */
 public class SharePointDocument extends BaseEntity {
 
-    private final Entity entity = new Entity(EntityName.SharePointDocument);
+    private Entity entity;
 
     private CrmString absoluteUrl;
     private CrmString author;
@@ -381,6 +381,11 @@ public class SharePointDocument extends BaseEntity {
 
     @Override
     protected Entity getEntity() {
+
+        if (entity == null) {
+            entity = new Entity(EntityName.SharePointDocument);
+        }
+
         return entity;
     }
 

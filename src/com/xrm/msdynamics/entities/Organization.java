@@ -16,7 +16,7 @@ import org.w3c.dom.NodeList;
  */
 public class Organization extends BaseEntity {
 
-    private Entity entity = new Entity(EntityName.Organization);
+    private Entity entity;
 
     public static final String[] OrganizationColumns = new String[]{};
 
@@ -45,6 +45,10 @@ public class Organization extends BaseEntity {
 
     @Override
     protected Entity getEntity() {
+
+        if (entity == null) {
+            entity = new Entity(EntityName.Organization);
+        }
         return entity;
     }
 

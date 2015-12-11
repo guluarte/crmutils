@@ -18,7 +18,7 @@ import org.w3c.dom.NodeList;
  */
 public class EmailTemplate extends BaseEntity {
 
-    Entity entity = new Entity(Enums.EntityName.EmailTemplate);
+    Entity entity;
 
     private CrmString title;
     private CrmString body;
@@ -165,6 +165,10 @@ public class EmailTemplate extends BaseEntity {
 
     @Override
     protected Entity getEntity() {
+        
+        if (entity == null) {
+            entity = new Entity(Enums.EntityName.EmailTemplate);
+        }
         return entity;
     }
 

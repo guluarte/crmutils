@@ -28,7 +28,7 @@ import org.w3c.dom.NodeList;
  */
 public class OrderProduct extends BaseProduct {
 
-    private final Entity entity = new Entity(EntityName.OrderProduct);
+    private Entity entity;
 
     private CrmBoolean iProductOverridden;
     private CrmBoolean isPriceOverridden;
@@ -397,6 +397,11 @@ public class OrderProduct extends BaseProduct {
 
     @Override
     protected Entity getEntity() {
+
+        if (entity == null) {
+            entity = new Entity(EntityName.OrderProduct);
+        }
+
         return entity;
     }
 

@@ -18,7 +18,7 @@ import org.w3c.dom.NodeList;
  */
 public class Account extends BaseEntity {
 
-    private final Entity entity = new Entity(EntityName.Account);
+    private Entity entity;
 
     private CrmString name;
 
@@ -84,6 +84,11 @@ public class Account extends BaseEntity {
 
     @Override
     protected Entity getEntity() {
+
+        if (entity == null) {
+            entity = new Entity(EntityName.Account);
+        }
+
         return entity;
     }
 

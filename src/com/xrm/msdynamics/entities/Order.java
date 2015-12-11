@@ -27,7 +27,7 @@ public class Order extends BaseEntity {
 
     private final ArrayList<OrderProduct> orderProducts = new ArrayList<>();
 
-    private final Entity entity = new Entity(EntityName.Order);
+    private Entity entity;
 
     private DateTime createdOn;
     private DateTime submitDate;
@@ -354,6 +354,11 @@ public class Order extends BaseEntity {
 
     @Override
     protected Entity getEntity() {
+
+        if (entity == null) {
+            entity = new Entity(EntityName.Order);
+        }
+
         return entity;
     }
 
