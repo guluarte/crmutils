@@ -197,6 +197,70 @@ Task
         
         //Changing the task status
         service.SetStateRequest(task.toEntityReference(), task.getStatusCompleted());
+		
+LeadApi for subscribing/unsubscribing
+
+	public interface ILeadApi {
+		void setSubscribeValue(Lead lead, boolean subscribe) throws SAXException, ParserConfigurationException, Exception; 
+		void setSubscribeValue(String leadId, boolean subscribe) throws SAXException, ParserConfigurationException, Exception;
+		void subscribe(Lead lead) throws SAXException, ParserConfigurationException, Exception; 
+		void subscribe(String leadId) throws SAXException, ParserConfigurationException, Exception;
+		void unsubscribe(String leadId) throws SAXException, ParserConfigurationException, Exception;
+		void unsubscribe(Lead lead) throws SAXException, ParserConfigurationException, Exception;
+		boolean toogleSubscribe(String leadId) throws SAXException, ParserConfigurationException, Exception;    
+		boolean toogleSubscribe(Lead lead) throws SAXException, ParserConfigurationException, Exception; 
+		Lead retrieve(String leadId) throws SAXException, ParserConfigurationException, Exception;
+		ArrayList<Lead> retrieveAll() throws SAXException, ParserConfigurationException, Exception;
+		boolean getSubscriptionValue(String leadId) throws SAXException, ParserConfigurationException, Exception;
+		boolean getSubscriptionValue(Lead lead, boolean refreshEntity) throws SAXException, ParserConfigurationException, Exception;
+	}
+
+
+    public static void testLeadApi(OrganizationService service) throws ParserConfigurationException, Exception {
+        
+        String leadId = "ac7cbea7-4395-e511-80d4-00155d026854";
+        
+        // We init the class passing the service
+        LeadApi leadApi = new LeadApi(service);
+        
+        // Retrieving all leads
+        ArrayList<Lead> leads = leadApi.retrieveAll();
+        
+        // Retrieving a single lead by id
+        Lead lead = leadApi.retrieve(leadId);
+        
+        // Getting the current subscription value, true if we want to refresh the entity
+        boolean startingSubscriptionValueByLead = leadApi.getSubscriptionValue(lead, true);
+       
+        // Setting the subsciption value
+        leadApi.setSubscribeValue(lead, true);
+        leadApi.setSubscribeValue(lead, false);
+        
+        // Setting the subscription value to true
+        // by the lead entity
+        leadApi.subscribe(lead);
+        
+        // by leadId
+        //leadApi.subscribe(leadId);
+        
+        // Setting the subscription value to false
+        // by the lead entity
+        leadApi.unsubscribe(lead);
+        // by the lead id
+        //leadApi.unsubscribe(leadId);
+        
+        // Toogling the subscription value by lead
+        leadApi.toogleSubscribe(lead);
+        // by the leadId
+        //leadApi.toogleSubscribe(leadId);
+        
+        // Retrieving the current subscription value by lead or by leadId
+        boolean endingSubscriptionValueByLead = leadApi.getSubscriptionValue(lead, true);
+        boolean curretnSubscriptionValueById = leadApi.getSubscriptionValue(leadId);
+        
+    }
+
+	
 #ChangeLog
 	
 Added the following methods to the entities LiveHIveContact and LiveHiveLead
@@ -209,3 +273,6 @@ Added LiveHiveActions
 Added Task, LiveHiveTask and TaskApi
 
 Added setAttachmentPageviewsDisplay() and getAttachmentPageviewsDisplay() to LiveHiveAction
+
+Added LeadApi
+
