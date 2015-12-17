@@ -276,3 +276,5 @@ Added setAttachmentPageviewsDisplay() and getAttachmentPageviewsDisplay() to Liv
 
 Added LeadApi
 
+Added ContactApi
+
