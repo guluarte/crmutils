@@ -6,6 +6,9 @@ package com.xrm.msdynamics.api;
 import com.xrm.msdynamics.Enums.EntityName;
 import com.xrm.msdynamics.OrganizationService;
 import com.xrm.msdynamics.api.interfaces.ILeadApi;
+import com.xrm.msdynamics.crmtypes.ConditionExpression;
+import com.xrm.msdynamics.crmtypes.Criteria;
+import com.xrm.msdynamics.crmtypes.FilterExpression;
 import com.xrm.msdynamics.entities.EntityFactory;
 import com.xrm.msdynamics.entities.Lead;
 import java.util.ArrayList;
@@ -109,5 +112,26 @@ public class LeadApi implements ILeadApi {
         }
 
         return false;
+    }
+
+    public ArrayList<Lead> retrieveLeadsIn(String[] leadsId) throws ParserConfigurationException, Exception {
+        
+        if(leadsId.length < 1) {
+            return new ArrayList<>();
+        }
+        
+        ConditionExpression conditionExpression = new ConditionExpression(ConditionExpression.Operator.Equal, "leadid", leadsId[0]);
+        FilterExpression filter = new FilterExpression(Criteria.FilterOperator.Or, conditionExpression);
+
+        for (String leadId : leadsId) {
+            filter.addCondition(new ConditionExpression(ConditionExpression.Operator.Equal, "leadid", leadId));
+        }
+
+        Criteria criteria = new Criteria(Criteria.FilterOperator.And, filter);
+
+        Document doc = service.RetrieveMultiple(EntityName.Lead, Lead.LeadColumns, criteria);
+
+        EntityFactory entityFactory = new EntityFactory<>(Lead.class);
+        return entityFactory.Build(doc);
     }
 }

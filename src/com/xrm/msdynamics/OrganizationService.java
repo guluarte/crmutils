@@ -254,6 +254,50 @@ public class OrganizationService {
         CrmExecuteSoap.ExecuteSoapRequest(authHeader, request, crmServerUrl);
     }
 
+    public Document RetrieveMultiple(String entityName, String[] columns, Criteria criteria) throws SAXException, ParserConfigurationException, Exception {
+
+        StringBuilder columnsString = new StringBuilder();
+        for (String column : columns) {
+            columnsString.append("<c:string>").append(column).append("</c:string>\n");
+        }
+
+        String request = "<s:Body>\n"
+                + "    <Execute xmlns=\"http://schemas.microsoft.com/xrm/2011/Contracts/Services\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">\n"
+                + "      <request i:type=\"a:RetrieveMultipleRequest\" xmlns:a=\"http://schemas.microsoft.com/xrm/2011/Contracts\">\n"
+                + "        <a:Parameters xmlns:b=\"http://schemas.datacontract.org/2004/07/System.Collections.Generic\">\n"
+                + "          <a:KeyValuePairOfstringanyType>\n"
+                + "            <b:key>Query</b:key>\n"
+                + "            <b:value i:type=\"a:QueryExpression\">\n"
+                + "              <a:ColumnSet>\n"
+                + "                <a:AllColumns>false</a:AllColumns>\n"
+                + "                <a:Columns xmlns:c=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">\n"
+                + columnsString.toString()
+                + "                </a:Columns>\n"
+                + "              </a:ColumnSet>\n"
+                + criteria.ToXML()
+                + "              <a:Distinct>false</a:Distinct>\n"
+                + "              <a:EntityName>" + entityName + "</a:EntityName>\n"
+                + "              <a:LinkEntities />\n"
+                + "              <a:Orders />\n"
+                + "              <a:PageInfo>\n"
+                + "                <a:Count>0</a:Count>\n"
+                + "                <a:PageNumber>0</a:PageNumber>\n"
+                + "                <a:PagingCookie i:nil=\"true\" />\n"
+                + "                <a:ReturnTotalRecordCount>false</a:ReturnTotalRecordCount>\n"
+                + "              </a:PageInfo>\n"
+                + "              <a:NoLock>false</a:NoLock>\n"
+                + "            </b:value>\n"
+                + "          </a:KeyValuePairOfstringanyType>\n"
+                + "        </a:Parameters>\n"
+                + "        <a:RequestId i:nil=\"true\" />\n"
+                + "        <a:RequestName>RetrieveMultiple</a:RequestName>\n"
+                + "      </request>\n"
+                + "    </Execute>\n"
+                + "  </s:Body>";
+
+        return CrmExecuteSoap.ExecuteSoapRequest(authHeader, request, crmServerUrl);
+    }
+
     /**
      * Set the status and state for the entity
      *
@@ -411,7 +455,7 @@ public class OrganizationService {
         }
         return contacts;
     }
-    
+
     /**
      * Retrieves the contact that match the full name
      *
