@@ -4,8 +4,12 @@
 package com.xrm.msdynamics.api;
 
 import com.xrm.msdynamics.Enums;
+import com.xrm.msdynamics.Enums.EntityName;
 import com.xrm.msdynamics.OrganizationService;
 import com.xrm.msdynamics.api.interfaces.IContactApi;
+import com.xrm.msdynamics.crmtypes.ConditionExpression;
+import com.xrm.msdynamics.crmtypes.Criteria;
+import com.xrm.msdynamics.crmtypes.FilterExpression;
 import com.xrm.msdynamics.entities.Contact;
 import com.xrm.msdynamics.entities.EntityFactory;
 
@@ -20,7 +24,7 @@ import org.xml.sax.SAXException;
  * @author rguluarte
  */
 public class ContactApi implements IContactApi {
-    
+
     private final OrganizationService service;
 
     public ContactApi(OrganizationService service) {
@@ -104,10 +108,45 @@ public class ContactApi implements IContactApi {
             contact = retrieve(contact.getId());
         }
 
-        if (contact.getDoNotEmail()!= null) {
+        if (contact.getDoNotEmail() != null) {
             return !((boolean) contact.getDoNotEmail().getValue()); // MS dynamics is do not email
         }
 
         return false;
+    }
+
+    public ArrayList<Contact> retrieveWithCriteria(Criteria criteria) throws ParserConfigurationException, Exception {
+
+        Document doc = service.RetrieveMultiple(EntityName.Contact, Contact.ContactColumns, criteria);
+
+        EntityFactory entityFactory = new EntityFactory<>(Contact.class);
+        return entityFactory.Build(doc);
+
+    }
+
+    public ArrayList<Contact> retrieveIn(String[] contactsId, String column) throws ParserConfigurationException, Exception {
+
+        if (contactsId.length < 1) {
+            return new ArrayList<>();
+        }
+
+        ConditionExpression conditionExpression = new ConditionExpression(ConditionExpression.Operator.Equal, column, contactsId[0]);
+        FilterExpression filter = new FilterExpression(Criteria.FilterOperator.Or, conditionExpression);
+
+        for (String contactId : contactsId) {
+            filter.addCondition(new ConditionExpression(ConditionExpression.Operator.Equal, column, contactId));
+        }
+
+        Criteria criteria = new Criteria(Criteria.FilterOperator.And, filter);
+
+        return retrieveWithCriteria(criteria);
+    }
+
+    public ArrayList<Contact> retrieveIn(String[] contactsId) throws Exception {
+        return retrieveIn(contactsId, Contact.ID_COLUMN);
+    }
+
+    public ArrayList<Contact> retrieveInEmailList(String[] emails) throws Exception {
+        return retrieveIn(emails, Contact.EMAILADDRESS1_COLUMN);
     }
 }

@@ -260,6 +260,74 @@ LeadApi for subscribing/unsubscribing
         
     }
 
+Retrieving Contacts And Leads WithIn a List
+
+    public static void testCriteriaForLeads(OrganizationService service) throws ParserConfigurationException, Exception {
+
+        LeadApi leadApi = new LeadApi(service);
+        ArrayList<Lead> leadsById = leadApi.retrieveIn(new String[]{
+            "ac7cbea7-4395-e511-80d4-00155d026854", "a12748b0-d9a8-e511-80d5-00155d02686f"
+        });
+        
+        System.out.println("Leads By Id.");
+        
+        for (Lead leadById : leadsById) {
+            System.out.println("Id: " + leadById.getId() + " Topic: " + leadById.getSubject());
+        }
+        
+        ArrayList<Lead> leadsByEmail = leadApi.retrieveInEmailList(new String[]{
+            "rodolfo@xrm.com", "test@test.com"
+        });
+        
+        System.out.println("Leads By Email.");
+        
+        for (Lead leadByEmail1 : leadsByEmail) {
+            System.out.println("Id: " + leadByEmail1.getId() + " Topic: " + leadByEmail1.getSubject());
+        }
+        
+         ArrayList<Lead> allLeads = leadApi.retrieveAll();
+         
+         System.out.println("All Leads.");
+         
+         for (Lead lead : allLeads) {
+            System.out.println("Id: " + lead.getId() + " Topic: " + lead.getSubject());
+        }
+    }
+    
+
+Contacts
+	
+    public static void testCriteriaForContacts(OrganizationService service) throws ParserConfigurationException, Exception {
+        ContactApi contactApi = new ContactApi(service);
+        ArrayList<Contact> contacts = contactApi.retrieveAll();
+
+        ArrayList<Contact> contactsById = contactApi.retrieveIn(new String[]{
+            "dd5b2959-e392-e511-80d4-00155d026854", "0036b826-3595-e511-80d4-00155d026854"
+        });
+        
+        System.out.println("Contacts by Id.");
+        
+        for (Contact contactById : contactsById) {
+            System.out.println("Id: " + contactById.getId() + " Name: " + contactById.getFirstname());
+        }
+
+        ArrayList<Contact> contactsByEmail = contactApi.retrieveInEmailList(new String[]{
+            "test@test.com"
+        });
+        System.out.println("Contacts by Email.");
+        
+        for (Contact contactByEmail : contactsByEmail) {
+            System.out.println("Id: " + contactByEmail.getId() + " Name: " + contactByEmail.getFirstname());
+        }
+        
+        ArrayList<Contact> allContacts = contactApi.retrieveAll();
+        
+        System.out.println("All Contacts.");
+        
+        for (Contact contact : allContacts) {
+            System.out.println("Id: " + contact.getId() + " Name: " + contact.getFirstname());
+        }
+    }
 	
 #ChangeLog
 	
@@ -277,4 +345,7 @@ Added setAttachmentPageviewsDisplay() and getAttachmentPageviewsDisplay() to Liv
 Added LeadApi
 
 Added ContactApi
+
+Added Criteria, FilterExpression and Filters
+
 

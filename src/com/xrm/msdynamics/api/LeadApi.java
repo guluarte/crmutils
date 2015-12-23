@@ -114,24 +114,39 @@ public class LeadApi implements ILeadApi {
         return false;
     }
 
-    public ArrayList<Lead> retrieveLeadsIn(String[] leadsId) throws ParserConfigurationException, Exception {
-        
-        if(leadsId.length < 1) {
-            return new ArrayList<>();
-        }
-        
-        ConditionExpression conditionExpression = new ConditionExpression(ConditionExpression.Operator.Equal, "leadid", leadsId[0]);
-        FilterExpression filter = new FilterExpression(Criteria.FilterOperator.Or, conditionExpression);
-
-        for (String leadId : leadsId) {
-            filter.addCondition(new ConditionExpression(ConditionExpression.Operator.Equal, "leadid", leadId));
-        }
-
-        Criteria criteria = new Criteria(Criteria.FilterOperator.And, filter);
+    public ArrayList<Lead> retrieveWithCriteria(Criteria criteria) throws ParserConfigurationException, Exception {
 
         Document doc = service.RetrieveMultiple(EntityName.Lead, Lead.LeadColumns, criteria);
 
         EntityFactory entityFactory = new EntityFactory<>(Lead.class);
         return entityFactory.Build(doc);
+
     }
+
+    public ArrayList<Lead> retrieveIn(String[] leadsId, String column) throws ParserConfigurationException, Exception {
+
+        if (leadsId.length < 1) {
+            return new ArrayList<>();
+        }
+
+        ConditionExpression conditionExpression = new ConditionExpression(ConditionExpression.Operator.Equal, column, leadsId[0]);
+        FilterExpression filter = new FilterExpression(Criteria.FilterOperator.Or, conditionExpression);
+
+        for (String leadId : leadsId) {
+            filter.addCondition(new ConditionExpression(ConditionExpression.Operator.Equal, column, leadId));
+        }
+
+        Criteria criteria = new Criteria(Criteria.FilterOperator.And, filter);
+
+        return retrieveWithCriteria(criteria);
+    }
+
+    public ArrayList<Lead> retrieveIn(String[] leadsId) throws Exception {
+        return retrieveIn(leadsId, Lead.ID_COLUMN);
+    }
+
+    public ArrayList<Lead> retrieveInEmailList(String[] emails) throws Exception {
+        return retrieveIn(emails, Lead.EMAIL_COLUMN);
+    }
+    
 }
