@@ -293,6 +293,20 @@ Retrieving Contacts And Leads WithIn a List
             System.out.println("Id: " + lead.getId() + " Topic: " + lead.getSubject());
         }
     }
+	
+Retrieving Lead Views
+
+        LeadApi leadApi = new LeadApi(service);
+        
+        ArrayList<View> leadViews = leadApi.retrieveLeadViews();
+        
+        for (View leadView : leadViews) {
+            ArrayList<Lead> leadsInView = leadApi.leadsInView(leadView);
+            System.out.println("Leadds in view =" + leadView.getName());
+            for (Lead leadInView : leadsInView) {
+                System.out.println("\tleadId =" + leadInView.getId());
+            }
+        }
     
 
 Contacts
