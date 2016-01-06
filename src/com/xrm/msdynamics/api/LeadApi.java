@@ -11,6 +11,7 @@ import com.xrm.msdynamics.crmtypes.Criteria;
 import com.xrm.msdynamics.crmtypes.FilterExpression;
 import com.xrm.msdynamics.entities.EntityFactory;
 import com.xrm.msdynamics.entities.Lead;
+import com.xrm.msdynamics.entities.View;
 import java.util.ArrayList;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -148,5 +149,33 @@ public class LeadApi implements ILeadApi {
     public ArrayList<Lead> retrieveInEmailList(String[] emails) throws Exception {
         return retrieveIn(emails, Lead.EMAIL_COLUMN);
     }
+
+    // Returns all views that returns leads
+    public ArrayList<View> retrieveLeadViews() throws ParserConfigurationException, Exception {
+        
+        ConditionExpression conditionExpression = new ConditionExpression(ConditionExpression.Operator.Equal, View.RETURNEDTYPECODE, EntityName.Lead);
+        FilterExpression filter = new FilterExpression(Criteria.FilterOperator.Or, conditionExpression);
+        Criteria criteria = new Criteria(Criteria.FilterOperator.And, filter);
+        
+        Document doc = service.RetrieveMultiple(EntityName.View, View.Columns, criteria);
+
+        EntityFactory entityFactory = new EntityFactory<>(View.class);
+        
+        return entityFactory.Build(doc);
+    }
     
+    public ArrayList<Lead> leadsInView(View view) throws InstantiationException, IllegalAccessException, ParserConfigurationException, Exception {
+        
+        if(view.getFetchxml() == null || "".equals(view.getFetchxml().toString())) {
+            return new ArrayList<>();
+        }
+        
+        Document doc = service.runFetchXmlQuery(view.getFetchxml().toString());
+
+        EntityFactory entityFactory = new EntityFactory<>(Lead.class);
+        
+        return entityFactory.Build(doc);
+        
+    }
+
 }

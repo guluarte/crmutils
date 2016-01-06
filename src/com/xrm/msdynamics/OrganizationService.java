@@ -1593,4 +1593,29 @@ public class OrganizationService {
         return CrmExecuteSoap.ExecuteSoapRequest(authHeader, request, crmServerUrl);
     }
 
+    public Document runFetchXmlQuery(String fetchXml) throws ParserConfigurationException, Exception {
+
+        fetchXml = fetchXml.replaceAll("<", "&lt;");
+        fetchXml = fetchXml.replaceAll(">", "&gt;");
+
+        String request = "  <s:Body>\n"
+                + "    <Execute xmlns=\"http://schemas.microsoft.com/xrm/2011/Contracts/Services\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">\n"
+                + "      <request i:type=\"a:RetrieveMultipleRequest\" xmlns:a=\"http://schemas.microsoft.com/xrm/2011/Contracts\">\n"
+                + "        <a:Parameters xmlns:b=\"http://schemas.datacontract.org/2004/07/System.Collections.Generic\">\n"
+                + "          <a:KeyValuePairOfstringanyType>\n"
+                + "            <b:key>Query</b:key>\n"
+                + "            <b:value i:type=\"a:FetchExpression\">\n"
+                + "              <a:Query>" + fetchXml + "</a:Query>\n"
+                + "            </b:value>\n"
+                + "          </a:KeyValuePairOfstringanyType>\n"
+                + "        </a:Parameters>\n"
+                + "        <a:RequestId i:nil=\"true\" />\n"
+                + "        <a:RequestName>RetrieveMultiple</a:RequestName>\n"
+                + "      </request>\n"
+                + "    </Execute>\n"
+                + "  </s:Body>";
+
+        return executeRequest(request);
+    }
+
 }
