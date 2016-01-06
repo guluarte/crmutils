@@ -12,6 +12,8 @@ import com.xrm.msdynamics.crmtypes.Criteria;
 import com.xrm.msdynamics.crmtypes.FilterExpression;
 import com.xrm.msdynamics.entities.Contact;
 import com.xrm.msdynamics.entities.EntityFactory;
+import com.xrm.msdynamics.entities.View;
+import com.xrm.msdynamics.exceptions.ServiceFaultException;
 
 import java.util.ArrayList;
 import javax.xml.parsers.ParserConfigurationException;
@@ -148,5 +150,33 @@ public class ContactApi implements IContactApi {
 
     public ArrayList<Contact> retrieveInEmailList(String[] emails) throws Exception {
         return retrieveIn(emails, Contact.EMAILADDRESS1_COLUMN);
+    }
+    
+       public ArrayList<View> retrieveViews() throws ParserConfigurationException, Exception {
+        
+        ConditionExpression conditionExpression = new ConditionExpression(ConditionExpression.Operator.Equal, View.RETURNEDTYPECODE, EntityName.Contact);
+        FilterExpression filter = new FilterExpression(Criteria.FilterOperator.Or, conditionExpression);
+        Criteria criteria = new Criteria(Criteria.FilterOperator.And, filter);
+        
+        Document doc = service.RetrieveMultiple(EntityName.View, View.Columns, criteria);
+
+        EntityFactory entityFactory = new EntityFactory<>(View.class);
+        
+        return entityFactory.Build(doc);
+    }
+    
+    public ArrayList<Contact> contactsInView(View view) throws InstantiationException, IllegalAccessException, ParserConfigurationException, Exception {
+        
+        if(view.getFetchxml() == null || "".equals(view.getFetchxml().toString()) || view.getFetchxml().toString().contains("{0}") ) {
+            return new ArrayList<>();
+        }
+        
+        
+        Document doc = service.runFetchXmlQuery(view.getFetchxml().toString());
+
+        EntityFactory entityFactory = new EntityFactory<>(Contact.class);
+        
+        return entityFactory.Build(doc);
+        
     }
 }

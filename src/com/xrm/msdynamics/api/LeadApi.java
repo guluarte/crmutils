@@ -166,7 +166,7 @@ public class LeadApi implements ILeadApi {
     
     public ArrayList<Lead> leadsInView(View view) throws InstantiationException, IllegalAccessException, ParserConfigurationException, Exception {
         
-        if(view.getFetchxml() == null || "".equals(view.getFetchxml().toString())) {
+        if(view.getFetchxml() == null || "".equals(view.getFetchxml().toString()) || view.getFetchxml().toString().contains("{0}") ) {
             return new ArrayList<>();
         }
         

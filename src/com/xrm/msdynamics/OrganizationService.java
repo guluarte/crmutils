@@ -15,6 +15,7 @@ import com.xrm.msdynamics.entities.EntityFactory;
 import com.xrm.msdynamics.entities.Lead;
 import com.xrm.msdynamics.entities.Note;
 import com.xrm.msdynamics.entities.SharePointDocument;
+import com.xrm.msdynamics.exceptions.ServiceFaultException;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -1597,6 +1598,10 @@ public class OrganizationService {
 
         fetchXml = fetchXml.replaceAll("<", "&lt;");
         fetchXml = fetchXml.replaceAll(">", "&gt;");
+        
+        if(fetchXml.contains("{0}")) {
+            throw new ServiceFaultException("Parameterized queries are not supported");
+        }
 
         String request = "  <s:Body>\n"
                 + "    <Execute xmlns=\"http://schemas.microsoft.com/xrm/2011/Contracts/Services\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">\n"
