@@ -176,6 +176,7 @@ public class Enums {
         public static final String Task = "task";
         public static final String View = "savedquery";
         public static final String SavedView = "userquery";
+        public static final String Report = "report";
     }
 
     public static class EntityPluralName {

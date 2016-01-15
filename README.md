@@ -308,6 +308,19 @@ Retrieving Lead Views
             }
         }
     
+Retrieving Saved Views
+
+        LeadApi leadApi = new LeadApi(service);
+
+        ArrayList<View> leadViews = leadApi.retrieveLeadSavedViews();
+
+        for (View leadView : leadViews) {
+            ArrayList<Lead> leadsInView = leadApi.leadsInView(leadView);
+            System.out.println("Leads in view =" + leadView.getName());
+            for (Lead leadInView : leadsInView) {
+                System.out.println("\tleadId =" + leadInView.getId());
+            }
+        }
 
 Contacts
 	
@@ -342,6 +355,36 @@ Contacts
             System.out.println("Id: " + contact.getId() + " Name: " + contact.getFirstname());
         }
     }
+	
+Retrieving Saved Views for Contacts
+
+        ContactApi contactApi = new ContactApi(service);
+        ArrayList<View> contactViews = contactApi.retrieveSavedViews();
+
+        for (View contactView : contactViews) {
+            ArrayList<Contact> contactsInView = contactApi.contactsInView(contactView);
+            System.out.println("Contacts in view =" + contactView.getName());
+            for (Contact contactInView : contactsInView) {
+                System.out.println("\tContactId =" + contactInView.getId());
+            }
+        }
+
+	
+Retrieving Reports
+
+        Document reportsResponseDocument = service.RetrieveAll(EntityName.Report, Report.Columns, null);
+        EntityFactory entityFactory = new EntityFactory<>(Report.class);
+        ArrayList<Report> reports = entityFactory.Build(reportsResponseDocument);
+        
+        for (Report report : reports) {
+            System.out.println("\tReportId =" + report.getId());
+            System.out.println("\t\tName =" + report.getName());
+            System.out.println("\t\tDescription =" + report.getDescription());
+            System.out.println("\t\tQuery Info =" + report.getQueryInfo());
+            System.out.println("\t\tSSRS ID =" + report.getReportNameOnSrs());
+        }
+
+		
 	
 #ChangeLog
 	
