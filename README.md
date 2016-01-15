@@ -372,18 +372,28 @@ Retrieving Saved Views for Contacts
 	
 Retrieving Reports
 
-        Document reportsResponseDocument = service.RetrieveAll(EntityName.Report, Report.Columns, null);
-        EntityFactory entityFactory = new EntityFactory<>(Report.class);
-        ArrayList<Report> reports = entityFactory.Build(reportsResponseDocument);
+        ReportApi reportApi = new ReportApi(service);
+        ArrayList<Report> reports = reportApi.getAll();
         
         for (Report report : reports) {
             System.out.println("\tReportId =" + report.getId());
             System.out.println("\t\tName =" + report.getName());
             System.out.println("\t\tDescription =" + report.getDescription());
-            System.out.println("\t\tQuery Info =" + report.getQueryInfo());
+            //System.out.println("\t\tQuery Info =" + report.getQueryInfo());
             System.out.println("\t\tSSRS ID =" + report.getReportNameOnSrs());
         }
 
+
+Sample Output
+
+	ReportId =3a9e7c0f-dc8f-e511-80d0-00155dff7902
+			Name =Neglected Cases
+			Description =Identify cases that have not been contacted recently. 
+			SSRS ID =1033{7358F4D6-605C-4D25-9CA2-0583FC2E683F}
+		ReportId =429e7c0f-dc8f-e511-80d0-00155dff7902
+			Name =Top Knowledge Base Articles
+			Description =Identify the most frequently used knowledge base articles. 
+			SSRS ID =1033{BD8A98C4-8DA0-4505-99C2-22FB9D0FC52A}
 		
 	
 #ChangeLog
@@ -405,4 +415,4 @@ Added ContactApi
 
 Added Criteria, FilterExpression and Filters
 
-
+Added Reports and SavedViews
