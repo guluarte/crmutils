@@ -11,6 +11,7 @@ import com.xrm.msdynamics.crmtypes.Criteria;
 import com.xrm.msdynamics.crmtypes.FilterExpression;
 import com.xrm.msdynamics.entities.EntityFactory;
 import com.xrm.msdynamics.entities.Lead;
+import com.xrm.msdynamics.entities.SavedView;
 import com.xrm.msdynamics.entities.View;
 import java.util.ArrayList;
 
@@ -160,6 +161,19 @@ public class LeadApi implements ILeadApi {
         Document doc = service.RetrieveMultiple(EntityName.View, View.Columns, criteria);
 
         EntityFactory entityFactory = new EntityFactory<>(View.class);
+        
+        return entityFactory.Build(doc);
+    }
+    
+    public ArrayList<View> retrieveLeadSavedViews() throws ParserConfigurationException, Exception {
+        
+        ConditionExpression conditionExpression = new ConditionExpression(ConditionExpression.Operator.Equal, SavedView.RETURNEDTYPECODE, EntityName.Lead);
+        FilterExpression filter = new FilterExpression(Criteria.FilterOperator.Or, conditionExpression);
+        Criteria criteria = new Criteria(Criteria.FilterOperator.And, filter);
+        
+        Document doc = service.RetrieveMultiple(EntityName.SavedView, SavedView.Columns, criteria);
+
+        EntityFactory entityFactory = new EntityFactory<>(SavedView.class);
         
         return entityFactory.Build(doc);
     }

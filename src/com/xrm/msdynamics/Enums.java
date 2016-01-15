@@ -175,6 +175,7 @@ public class Enums {
         public static final String LiveHiveAction = "xrm_livehiveaction";
         public static final String Task = "task";
         public static final String View = "savedquery";
+        public static final String SavedView = "userquery";
     }
 
     public static class EntityPluralName {
