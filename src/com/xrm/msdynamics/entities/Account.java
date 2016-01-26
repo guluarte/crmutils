@@ -31,7 +31,8 @@ public class Account extends BaseEntity {
     public static String[] AccountColumns = new String[]{
         ID_COLUMN,
         NAME_COLUMN,
-        PRIMARYCONTACT_COLUMN,};
+        PRIMARYCONTACT_COLUMN
+    };
 
     public Account() {
 

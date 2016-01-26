@@ -191,7 +191,7 @@ public class Contact extends BaseEntity {
             }
 
             case PARENTCUSTOMERID_COLUMN: {
-                this.setParentcustomerid(value);
+                this.setParentCustomerId(value);
                 break;
             }
 
@@ -317,8 +317,8 @@ public class Contact extends BaseEntity {
             parameters.add(getModifiedon());
         }
 
-        if (getParentcustomerid() != null) {
-            parameters.add(getParentcustomerid());
+        if (getParentCustomerId()!= null) {
+            parameters.add(getParentCustomerId());
         }
 
         if (getBirthdate() != null) {
@@ -519,14 +519,14 @@ public class Contact extends BaseEntity {
     /**
      * @return the parentcustomerid
      */
-    public EntityReference getParentcustomerid() {
+    public EntityReference getParentCustomerId() {
         return parentcustomerid;
     }
 
     /**
      * @param parentcustomerid the parentcustomerid to set
      */
-    public void setParentcustomerid(String parentcustomerid) {
+    public void setParentCustomerId(String parentcustomerid) {
         this.parentcustomerid = new EntityReference(EntityName.Account, PARENTCUSTOMERID_COLUMN, parentcustomerid);
     }
 
