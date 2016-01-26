@@ -21,17 +21,35 @@ public class Account extends BaseEntity {
     private Entity entity;
 
     private CrmString name;
+    private CrmString telephone;
+    private CrmString fax;
+    private CrmString websiteUrl;
+    private CrmString tickerSymbol;
+    private CrmString description;
 
     private EntityReference primarycontactid;
+    private EntityReference parentAccountId;
 
     public static final String ID_COLUMN = "accountid";
     public static final String NAME_COLUMN = "name";
     public static final String PRIMARYCONTACT_COLUMN = "primarycontactid";
+    public static final String TELEPHONE = "telephone1";
+    public static final String FAX = "fax";
+    public static final String WEBSITEURL = "websiteurl";
+    public static final String PARENTACCOUNTID = "parentaccountid";
+    public static final String TICKERSYMBOL = "tickersymbol";
+    public static final String DESCRIPTION = "description";
 
     public static String[] AccountColumns = new String[]{
         ID_COLUMN,
         NAME_COLUMN,
-        PRIMARYCONTACT_COLUMN
+        PRIMARYCONTACT_COLUMN,
+        TELEPHONE,
+        FAX,
+        WEBSITEURL,
+        PARENTACCOUNTID,
+        TICKERSYMBOL,
+        DESCRIPTION
     };
 
     public Account() {
@@ -60,6 +78,31 @@ public class Account extends BaseEntity {
                 this.setPrimarycontactid(value);
                 break;
             }
+            case TELEPHONE: {
+                this.setTelephone(value);
+                break;
+            }
+            case FAX: {
+                this.setFax(value);
+                break;
+            }
+            case WEBSITEURL: {
+                this.setWebsiteUrl(value);
+                break;
+            }
+            case PARENTACCOUNTID: {
+                this.setParentAccountId(value);
+                break;
+            }
+            case TICKERSYMBOL: {
+                this.setTickerSymbol(value);
+                break;
+            }
+            case DESCRIPTION: {
+                this.setDescription(value);
+                break;
+            }
+            
         }
     }
 
@@ -78,6 +121,30 @@ public class Account extends BaseEntity {
 
         if (getName() != null) {
             options.add(getName());
+        }
+        
+        if (getTelephone()!= null) {
+            options.add(getTelephone());
+        }
+        
+        if (getFax()!= null) {
+            options.add(getFax());
+        }
+        
+        if (getWebsiteUrl()!= null) {
+            options.add(getWebsiteUrl());
+        }
+        
+        if (getParentAccountId()!= null) {
+            options.add(getParentAccountId());
+        }
+        
+        if (getTickerSymbol()!= null) {
+            options.add(getTickerSymbol());
+        }
+        
+        if (getDescription()!= null) {
+            options.add(getDescription());
         }
 
         return options;
@@ -124,6 +191,90 @@ public class Account extends BaseEntity {
      */
     public void setPrimarycontactid(String primarycontactid) {
         this.primarycontactid = new EntityReference(EntityName.Contact, PRIMARYCONTACT_COLUMN, primarycontactid);
+    }
+
+    /**
+     * @return the telephone
+     */
+    public CrmString getTelephone() {
+        return telephone;
+    }
+
+    /**
+     * @param telephone the telephone to set
+     */
+    public void setTelephone(String telephone) {
+        this.telephone = new CrmString(TELEPHONE, telephone);
+    }
+
+    /**
+     * @return the fax
+     */
+    public CrmString getFax() {
+        return fax;
+    }
+
+    /**
+     * @param fax the fax to set
+     */
+    public void setFax(String fax) {
+        this.fax = new CrmString(FAX, fax);
+    }
+
+    /**
+     * @return the websiteUrl
+     */
+    public CrmString getWebsiteUrl() {
+        return websiteUrl;
+    }
+
+    /**
+     * @param websiteUrl the websiteUrl to set
+     */
+    public void setWebsiteUrl(String websiteUrl) {
+        this.websiteUrl = new CrmString(WEBSITEURL, websiteUrl);
+    }
+
+    /**
+     * @return the tickerSymbol
+     */
+    public CrmString getTickerSymbol() {
+        return tickerSymbol;
+    }
+
+    /**
+     * @param tickerSymbol the tickerSymbol to set
+     */
+    public void setTickerSymbol(String tickerSymbol) {
+        this.tickerSymbol = new CrmString(TICKERSYMBOL, tickerSymbol);
+    }
+
+    /**
+     * @return the description
+     */
+    public CrmString getDescription() {
+        return description;
+    }
+
+    /**
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description = new CrmString(DESCRIPTION, description);
+    }
+
+    /**
+     * @return the parentAccountId
+     */
+    public EntityReference getParentAccountId() {
+        return parentAccountId;
+    }
+
+    /**
+     * @param parentAccountId the parentAccountId to set
+     */
+    public void setParentAccountId(String parentAccountId) {
+        this.parentAccountId = new EntityReference(EntityName.Account, PARENTACCOUNTID, parentAccountId);
     }
 
 }
