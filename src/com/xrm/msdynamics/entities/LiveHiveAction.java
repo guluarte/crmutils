@@ -29,6 +29,7 @@ public class LiveHiveAction extends BaseEntity {
     Entity entity;
 
     private CrmString name;
+    private CrmString actionName;
     private CrmString listOfRecipientEmailAddresses;
     private CrmString emailBody;
     private CrmString emailSubject;
@@ -62,6 +63,7 @@ public class LiveHiveAction extends BaseEntity {
     public static final String ATTACHMENT_PAGE_VIEWS = "xrm_attachmentpageviews";
     public static final String ATTACHMENT_PAGE_VIEWS_DISPLAY = "xrm_attachmentpageviewsdisplay";
     public static final String ATTACHMENTS_LIST = "xrm_attachmentlist";
+    public static final String ACTIONNAME = "xrm_actionname";
 
     public static String[] DefaultColumns = new String[]{
         NAME,
@@ -77,8 +79,8 @@ public class LiveHiveAction extends BaseEntity {
         CONTACT_ID,
         ATTACHMENT_PAGE_VIEWS,
         ATTACHMENT_PAGE_VIEWS_DISPLAY,
-        ATTACHMENTS_LIST
-
+        ATTACHMENTS_LIST,
+        ACTIONNAME
     };
 
     private static final int RECIPIENT_MAX_LENGTH = 100;
@@ -175,6 +177,11 @@ public class LiveHiveAction extends BaseEntity {
                 setAttachmentPageviewsDisplay(value);
                 break;
             }
+            
+            case ACTIONNAME: {
+                setActionName(value);
+                break;
+            }
 
         }
     }
@@ -187,10 +194,14 @@ public class LiveHiveAction extends BaseEntity {
     @Override
     protected ArrayList<XmlSerializable> getAttributeCollection() {
 
-        ArrayList<XmlSerializable> parameters = new ArrayList<>();
+        ArrayList<XmlSerializable> parameters = new ArrayList<>(); 
 
         if (getName() != null && !getName().isEmpty()) {
             parameters.add(getName());
+        }
+        
+        if (getActionName()!= null && !getActionName().isEmpty()) {
+            parameters.add(getActionName());
         }
 
         if (getListOfRecipientEmailAddresses() != null && !getListOfRecipientEmailAddresses().isEmpty()) {
@@ -480,6 +491,20 @@ public class LiveHiveAction extends BaseEntity {
      */
     public void setAttachmentPageviewsDisplay(String attachmentPageviewsDisplay) {
         this.attachmentPageviewsDisplay = new CrmString(ATTACHMENT_PAGE_VIEWS_DISPLAY, attachmentPageviewsDisplay);
+    }
+
+    /**
+     * @return the actionName
+     */
+    public CrmString getActionName() {
+        return actionName;
+    }
+
+    /**
+     * @param actionName the actionName to set
+     */
+    public void setActionName(String actionName) {
+        this.actionName = new CrmString(ACTIONNAME, actionName);
     }
 
 }
