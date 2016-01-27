@@ -35,6 +35,7 @@ public class LiveHiveLead extends Lead {
 
     private CrmString engagementDisplayOnly;
     private CrmString recentChangeDisplayOnly;
+    private CrmString xrmLeadSource;
 
     private CrmDouble xrmLiveHiveClosingScore;
     private CrmDouble xrmLiveHiveScore;
@@ -58,8 +59,55 @@ public class LiveHiveLead extends Lead {
 
     public static final String ENGAGEMENT_DISPLAY = "xrm_engagementdisplayonly";
     public static final String RECENT_CHANGE_DISPLAY = "xrm_recentchangedisplayonly";
+    public static final String XRM_LEAD_SOURCE = "xrm_leadsource";
 
     public static String[] LiveHiveLeadColumns = new String[]{
+        ID_COLUMN,
+        SUBJECT_COLUMN,
+        FIRSTNAME_COLUMN,
+        LASTNAME_COLUMN,
+        LEADQUALITYCODE_COLUMN,
+        LEADSOURCECODE_COLUMN,
+        CREATEON_COLUMN,
+        EMAIL_COLUMN,
+        MODIFIEDON_COLUMN,
+        DONOTSENDMM_COLUMN,
+        DESCRIPTION_COLUMN,
+        ADDRESS1_LINE1_COLUMN,
+        ADDRESS1_LINE2_COLUMN,
+        ADDRESS1_CITY_COLUMN,
+        ADDRESS1_COUNTRY_COLUMN,
+        ADDRESS1_LATITUDE_COLUMN,
+        ADDRESS1_LONGITUDE_COLUMN,
+        ADDRESS1_TELEPHONE_COLUMN,
+        ADDRESS1_STATEORPROVINCE_COLUMN,
+        ADDRESS1_POSTALCODE_COLUMN,
+        PARENTACCOUNTID_COLUMN,
+        COMPANYNAME_COLUMN,
+        CONFIRMINTEREST_COLUMN,
+        PARENTCONTACTID_COLUMN,
+        JOBTITLE_COLUMN,
+        TELEPHONE1_COLUMN,
+        MOBILEPHONE_COLUMN,
+        FAX_COLUMN,
+        PREFEREDCONTACTMETHOD_COLUMN,
+        TRANSACTIONCURRENCYID_COLUMN,
+        DONOTEMAIL_COLUMN,
+        DONOTBULKEMAIL_COLUMN,
+        DONOTPHONE_COLUMN,
+        DONOTFAX_COLUMN,
+        DONOTPOSTALEMAIL_COLUMN,
+        OWNERID_COLUMN,
+        WEBSITEURL_COLUMN,
+        INDUSCTRYCODE_COLUMN,
+        REVENUE_COLUMN,
+        NUMBEROFEMPLOYEES_COLUMN,
+        SIC_COLUMN,
+        CAMPAIGNID_COLUMN,
+        PURCHASETIMEFRAME_COLUMN,
+        BUDGETAMOUNT_COLUMN,
+        PURCHASEPROCESS_COLUMN,
+        DECISIONMAKER_COLUMN,
         XRM_LIVEHIVE_CHANGE_IN_METRIC,
         XRM_LIVEHIVE_LAST_VIEW,
         XRM_LIVEHIVE_CLOSINGMETRIC,
@@ -72,7 +120,8 @@ public class LiveHiveLead extends Lead {
         XRM_LIVEHIVE_LAST_VIEW_ON,
         XRM_LIVEHIVE_LAST_SHARE_ON,
         ENGAGEMENT_DISPLAY,
-        RECENT_CHANGE_DISPLAY
+        RECENT_CHANGE_DISPLAY,
+        XRM_LEAD_SOURCE
     };
 
     public LiveHiveLead(NodeList nodes) {
@@ -85,9 +134,7 @@ public class LiveHiveLead extends Lead {
 
     @Override
     public String[] getDefaultColumns() {
-        List<String> l1 = Arrays.asList(LeadColumns);
-        l1.addAll(Arrays.asList(LiveHiveLeadColumns));
-        return (String[]) l1.toArray();
+        return LiveHiveLeadColumns;
     }
 
     @Override
@@ -173,6 +220,11 @@ public class LiveHiveLead extends Lead {
                 break;
             }
 
+            case XRM_LEAD_SOURCE: {
+                setXrmLeadSource(value);
+                break;
+            }
+
         }
 
     }
@@ -232,6 +284,10 @@ public class LiveHiveLead extends Lead {
 
         if (getEngagementDisplayOnly() != null) {
             parameters.add(getEngagementDisplayOnly());
+        }
+
+        if (getXrmLeadSource() != null) {
+            parameters.add(getXrmLeadSource());
         }
 
         return parameters;
@@ -417,5 +473,19 @@ public class LiveHiveLead extends Lead {
      */
     public void setRecentChangeDisplayOnly(String recentChangeDisplayOnly) {
         this.recentChangeDisplayOnly = new CrmString(RECENT_CHANGE_DISPLAY, recentChangeDisplayOnly);
+    }
+
+    /**
+     * @return the xrmLeadSource
+     */
+    public CrmString getXrmLeadSource() {
+        return xrmLeadSource;
+    }
+
+    /**
+     * @param xrmLeadSource the xrmLeadSource to set
+     */
+    public void setXrmLeadSource(String xrmLeadSource) {
+        this.xrmLeadSource = new CrmString(XRM_LEAD_SOURCE, xrmLeadSource);
     }
 }
