@@ -11,11 +11,10 @@ import com.xrm.msdynamics.crmtypes.XmlSerializable;
 
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.w3c.dom.NodeList;
 
 /**
@@ -33,6 +32,7 @@ public class LiveHiveContact extends Contact {
     private CrmString xrmLiveHiveState;
     private CrmString engagementDisplayOnly;
     private CrmString recentChangeDisplayOnly;
+    private CrmString xrmLeadSource;
 
     private CrmDouble xrmLiveHiveClosingScore;
     private CrmDouble xrmLiveHiveScore;
@@ -55,8 +55,39 @@ public class LiveHiveContact extends Contact {
     public static final String XRM_LIVEHIVE_LAST_SHARE_ON = "xrm_livehivelastshareon";
     public static final String ENGAGEMENT_DISPLAY = "xrm_engagementdisplayonly";
     public static final String RECENT_CHANGE_DISPLAY = "xrm_recentchangedisplayonly";
+    public static final String XRM_LEAD_SOURCE = "xrm_leadsource";
 
-    public static String[] LiveHiveLeadColumns = new String[]{
+    public static String[] LiveHiveContactColumns = new String[]{
+        ID_COLUMN,
+        CREATEDON_COLUMN,
+        EMAILADDRESS1_COLUMN,
+        FIRSTNAME_COLUMN,
+        LASTNAME_COLUMN,
+        DESCRIPTION_COLUMN,
+        MODIFIEDON_COLUMN,
+        PARENTCUSTOMERID_COLUMN,
+        JOBTITLE_COLUMN,
+        TELEPHONE1_COLUMN,
+        MOBILEPHONE_COLUMN,
+        FAX_COLUMN,
+        PREFERREDCONTACTMETHODCODE_COLUMN,
+        GENDERCODE_COLUMN,
+        FAMILYSTATUSCODE_COLUMN,
+        SPOUSESNAME_COLUMN,
+        BIRTHDATE_COLUMN,
+        ANNIVERSARY_COLUMN,
+        ORIGINATINGLEADID_COLUMN,
+        DONOTDENDMM_COLUMN,
+        DONOTEMAIL_COLUMN,
+        DONOTBULKEMAIL_COLUMN,
+        DONOTPHONE_COLUMN,
+        DONOTFAX_COLUMN,
+        DONOTPOSTALMAIL_COLUMN,
+        TRANSACTIONCURRENCYID_COLUMN,
+        CREDITLIMIT_COLUMN,
+        CREDITONHOLD_COLUMN,
+        PAYMENTTERMSCODE_COLUMN,
+        SHIPPINGMETHODCODE_COLUMN,
         XRM_LIVEHIVE_CHANGE_IN_METRIC,
         XRM_LIVEHIVE_LAST_VIEW,
         XRM_LIVEHIVE_CLOSINGMETRIC,
@@ -69,7 +100,8 @@ public class LiveHiveContact extends Contact {
         XRM_LIVEHIVE_LAST_VIEW_ON,
         XRM_LIVEHIVE_LAST_SHARE_ON,
         ENGAGEMENT_DISPLAY,
-        RECENT_CHANGE_DISPLAY
+        RECENT_CHANGE_DISPLAY,
+        XRM_LEAD_SOURCE
     };
 
     public LiveHiveContact(NodeList nodes) {
@@ -82,9 +114,7 @@ public class LiveHiveContact extends Contact {
 
     @Override
     public String[] getDefaultColumns() {
-        List<String> l1 = Arrays.asList(ContactColumns);
-        l1.addAll(Arrays.asList(LiveHiveLeadColumns));
-        return (String[]) l1.toArray();
+        return LiveHiveContactColumns;
     }
 
     @Override
@@ -169,6 +199,11 @@ public class LiveHiveContact extends Contact {
                 setXrmLiveHiveLastView(Integer.parseInt(value));
                 break;
             }
+            
+            case XRM_LEAD_SOURCE: {
+                setXrmLeadSource(value);
+                break;
+            }
 
         }
 
@@ -229,6 +264,10 @@ public class LiveHiveContact extends Contact {
         
         if (getRecentChangeDisplayOnly()!= null) {
             parameters.add(getRecentChangeDisplayOnly());
+        }
+        
+        if (getXrmLeadSource()!= null) {
+            parameters.add(getXrmLeadSource());
         }
 
         return parameters;
@@ -414,5 +453,19 @@ public class LiveHiveContact extends Contact {
      */
     public void setRecentChangeDisplayOnly(String recentChangeDisplayOnly) {
         this.recentChangeDisplayOnly = new CrmString(RECENT_CHANGE_DISPLAY, recentChangeDisplayOnly);
+    }
+
+    /**
+     * @return the xrmLeadSource
+     */
+    public CrmString getXrmLeadSource() {
+        return xrmLeadSource;
+    }
+
+    /**
+     * @param xrmLeadSource the xrmLeadSource to set
+     */
+    public void setXrmLeadSource(String xrmLeadSource) {
+        this.xrmLeadSource = new CrmString(XRM_LEAD_SOURCE, xrmLeadSource);
     }
 }
