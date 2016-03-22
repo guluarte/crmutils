@@ -36,6 +36,14 @@ public class SavedView extends View {
 
         super.setAttribute(key, value, logicalName);
 
+        switch (key) {
+
+            case ID: {
+                this.setId(value);
+                break;
+            }
+        }
+
     }
 
     @Override

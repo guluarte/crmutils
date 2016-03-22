@@ -10,6 +10,7 @@ import com.xrm.msdynamics.api.interfaces.IContactApi;
 import com.xrm.msdynamics.crmtypes.ConditionExpression;
 import com.xrm.msdynamics.crmtypes.Criteria;
 import com.xrm.msdynamics.crmtypes.FilterExpression;
+import com.xrm.msdynamics.entities.Account;
 import com.xrm.msdynamics.entities.Contact;
 import com.xrm.msdynamics.entities.EntityFactory;
 import com.xrm.msdynamics.entities.SavedView;
@@ -166,7 +167,27 @@ public class ContactApi implements IContactApi {
         return entityFactory.Build(doc);
     }
 
-    public ArrayList<View> retrieveSavedViews() throws ParserConfigurationException, Exception {
+    public ArrayList<View> retrievePublicSystemViews() throws ParserConfigurationException, Exception {
+
+        return retrieveViewByTypeAndReturnType(View.ViewType.MainApplicationView, EntityName.Contact, "0");
+    }
+
+    public Account getAccount(Contact contact) throws SAXException, ParserConfigurationException, Exception {
+
+        String accountId = null;
+
+        if (contact.getParentCustomerId() != null && contact.getParentCustomerId().getValue() != null && contact.getParentCustomerId().getValue() != "null") {
+            accountId = (String) contact.getParentCustomerId().getValue();
+        } else {
+            return null;
+        }
+        NodeList nodes = service.Retrieve(EntityName.Account, accountId, Account.AccountColumns);
+        Account retrievedAccount = new Account(nodes);
+
+        return retrievedAccount;
+    }
+
+    public ArrayList<SavedView> retrieveSavedViews() throws ParserConfigurationException, Exception {
 
         ConditionExpression conditionExpression = new ConditionExpression(ConditionExpression.Operator.Equal, SavedView.RETURNEDTYPECODE, EntityName.Contact);
         FilterExpression filter = new FilterExpression(Criteria.FilterOperator.Or, conditionExpression);
@@ -190,6 +211,70 @@ public class ContactApi implements IContactApi {
         EntityFactory entityFactory = new EntityFactory<>(Contact.class);
 
         return entityFactory.Build(doc);
+
+    }
+    
+    public ArrayList<Contact> contactsInSavedView(SavedView view) throws InstantiationException, IllegalAccessException, ParserConfigurationException, Exception {
+
+        if (view.getFetchxml() == null || "".equals(view.getFetchxml().toString()) || view.getFetchxml().toString().contains("{0}")) {
+            return new ArrayList<>();
+        }
+
+        Document doc = service.runFetchXmlQuery(view.getFetchxml().toString());
+
+        EntityFactory entityFactory = new EntityFactory<>(Contact.class);
+
+        return entityFactory.Build(doc);
+
+    }
+
+    public ArrayList<Contact> contactsInView(String viewId) throws InstantiationException, IllegalAccessException, ParserConfigurationException, Exception {
+
+        NodeList nodes = service.Retrieve(EntityName.View, viewId, View.Columns);
+        View retrievedView = new View(nodes);
+
+        return contactsInView(retrievedView);
+
+    }
+    
+    public ArrayList<Contact> contactsInSavedView(String viewId) throws InstantiationException, IllegalAccessException, ParserConfigurationException, Exception {
+
+        NodeList nodes = service.Retrieve(EntityName.SavedView, viewId, SavedView.Columns);
+        SavedView retrievedView = new SavedView(nodes);
+
+        return contactsInSavedView(retrievedView);
+
+    }
+
+    public ArrayList<View> retrieveViewByTypeAndReturnType(String type, String returnType, String isPrivate) throws ParserConfigurationException, Exception {
+
+        // Entity type filter
+        ConditionExpression conditionExpression = new ConditionExpression(ConditionExpression.Operator.Equal, View.RETURNEDTYPECODE, returnType);
+        FilterExpression filter = new FilterExpression(Criteria.FilterOperator.Or, conditionExpression);
+
+        // Is private filter
+        ConditionExpression isPrivateConditionExpression = new ConditionExpression(ConditionExpression.Operator.Equal, View.ISPRIVATE, isPrivate);
+        ConditionExpression isQuickFindQuery = new ConditionExpression(ConditionExpression.Operator.Equal, View.QUERYTYPE, type);
+
+        FilterExpression filterIsPrivate = new FilterExpression(Criteria.FilterOperator.And, isPrivateConditionExpression);
+        filterIsPrivate.addCondition(isQuickFindQuery);
+
+        Criteria criteria = new Criteria(Criteria.FilterOperator.And, filter);
+        criteria.addFilter(filterIsPrivate);
+
+        Document doc = service.RetrieveMultiple(EntityName.View, View.Columns, criteria);
+
+        EntityFactory entityFactory = new EntityFactory<>(View.class);
+
+        return entityFactory.Build(doc);
+    }
+
+    public ArrayList<Contact> leadsInView(String viewId) throws InstantiationException, IllegalAccessException, ParserConfigurationException, Exception {
+
+        NodeList nodes = service.Retrieve(EntityName.View, viewId, View.Columns);
+        View retrievedView = new View(nodes);
+
+        return contactsInView(retrievedView);
 
     }
 }

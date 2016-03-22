@@ -153,43 +153,103 @@ public class LeadApi implements ILeadApi {
 
     // Returns all views that returns leads
     public ArrayList<View> retrieveLeadViews() throws ParserConfigurationException, Exception {
-        
+
         ConditionExpression conditionExpression = new ConditionExpression(ConditionExpression.Operator.Equal, View.RETURNEDTYPECODE, EntityName.Lead);
         FilterExpression filter = new FilterExpression(Criteria.FilterOperator.Or, conditionExpression);
         Criteria criteria = new Criteria(Criteria.FilterOperator.And, filter);
-        
+
         Document doc = service.RetrieveMultiple(EntityName.View, View.Columns, criteria);
 
         EntityFactory entityFactory = new EntityFactory<>(View.class);
-        
+
         return entityFactory.Build(doc);
     }
-    
-    public ArrayList<View> retrieveLeadSavedViews() throws ParserConfigurationException, Exception {
-        
+
+    public ArrayList<View> retrieveViewByTypeAndReturnType(String type, String returnType, String isPrivate) throws ParserConfigurationException, Exception {
+
+        // Entity type filter
+        ConditionExpression conditionExpression = new ConditionExpression(ConditionExpression.Operator.Equal, View.RETURNEDTYPECODE, returnType);
+        FilterExpression filter = new FilterExpression(Criteria.FilterOperator.Or, conditionExpression);
+
+        // Is private filter
+        ConditionExpression isPrivateConditionExpression = new ConditionExpression(ConditionExpression.Operator.Equal, View.ISPRIVATE, isPrivate);
+        ConditionExpression isQuickFindQuery = new ConditionExpression(ConditionExpression.Operator.Equal, View.QUERYTYPE, type);
+
+        FilterExpression filterIsPrivate = new FilterExpression(Criteria.FilterOperator.And, isPrivateConditionExpression);
+        filterIsPrivate.addCondition(isQuickFindQuery);
+
+        Criteria criteria = new Criteria(Criteria.FilterOperator.And, filter);
+        criteria.addFilter(filterIsPrivate);
+
+        Document doc = service.RetrieveMultiple(EntityName.View, View.Columns, criteria);
+
+        EntityFactory entityFactory = new EntityFactory<>(View.class);
+
+        return entityFactory.Build(doc);
+    }
+
+    public ArrayList<View> retrievePublicSystemViews() throws ParserConfigurationException, Exception {
+
+        return retrieveViewByTypeAndReturnType(View.ViewType.MainApplicationView, EntityName.Lead, "0");
+    }
+
+    public ArrayList<SavedView> retrieveLeadSavedViews() throws ParserConfigurationException, Exception {
+
         ConditionExpression conditionExpression = new ConditionExpression(ConditionExpression.Operator.Equal, SavedView.RETURNEDTYPECODE, EntityName.Lead);
         FilterExpression filter = new FilterExpression(Criteria.FilterOperator.Or, conditionExpression);
         Criteria criteria = new Criteria(Criteria.FilterOperator.And, filter);
-        
+
         Document doc = service.RetrieveMultiple(EntityName.SavedView, SavedView.Columns, criteria);
 
         EntityFactory entityFactory = new EntityFactory<>(SavedView.class);
-        
+
         return entityFactory.Build(doc);
     }
-    
+
     public ArrayList<Lead> leadsInView(View view) throws InstantiationException, IllegalAccessException, ParserConfigurationException, Exception {
-        
-        if(view.getFetchxml() == null || "".equals(view.getFetchxml().toString()) || view.getFetchxml().toString().contains("{0}") ) {
+
+        if (view.getFetchxml() == null || "".equals(view.getFetchxml().toString()) || view.getFetchxml().toString().contains("{0}")) {
             return new ArrayList<>();
         }
-        
+
         Document doc = service.runFetchXmlQuery(view.getFetchxml().toString());
 
         EntityFactory entityFactory = new EntityFactory<>(Lead.class);
-        
+
         return entityFactory.Build(doc);
+
+    }
+    
+    public ArrayList<Lead> leadsInSavedView(SavedView view) throws InstantiationException, IllegalAccessException, ParserConfigurationException, Exception {
+
+        if (view.getFetchxml() == null || "".equals(view.getFetchxml().toString()) || view.getFetchxml().toString().contains("{0}")) {
+            return new ArrayList<>();
+        }
+
+        Document doc = service.runFetchXmlQuery(view.getFetchxml().toString());
+
+        EntityFactory entityFactory = new EntityFactory<>(Lead.class);
+
+        return entityFactory.Build(doc);
+
+    }
+
+    public ArrayList<Lead> leadsInSavedView(String viewId) throws InstantiationException, IllegalAccessException, ParserConfigurationException, Exception {
         
+        NodeList nodes = service.Retrieve(EntityName.SavedView, viewId, SavedView.Columns);
+        SavedView retrievedView = new SavedView(nodes);
+        
+        return leadsInSavedView(retrievedView);
+
+    }
+    
+    public ArrayList<Lead> leadsInView(String viewId) throws InstantiationException, IllegalAccessException, ParserConfigurationException, Exception {
+        
+        NodeList nodes = service.Retrieve(EntityName.View, viewId, View.Columns);
+        View retrievedView = new View(nodes);
+        
+        return leadsInView(retrievedView);
+
     }
 
 }

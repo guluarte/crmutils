@@ -297,30 +297,28 @@ Retrieving Contacts And Leads WithIn a List
 Retrieving Lead Views
 
         LeadApi leadApi = new LeadApi(service);
-        
-        ArrayList<View> leadViews = leadApi.retrieveLeadViews();
-        
+
+        ArrayList<SavedView> leadViews = leadApi.retrieveLeadSavedViews();
+
         for (View leadView : leadViews) {
-            ArrayList<Lead> leadsInView = leadApi.leadsInView(leadView);
-            System.out.println("Leadds in view =" + leadView.getName());
+            ArrayList<Lead> leadsInView = leadApi.leadsInSavedView(leadView.getId());
+            System.out.println("Leads in view =" + leadView.getName() + " Id:" + leadView.getId());
             for (Lead leadInView : leadsInView) {
                 System.out.println("\tleadId =" + leadInView.getId());
             }
         }
-    
-Retrieving Saved Views
 
-        LeadApi leadApi = new LeadApi(service);
+        ArrayList<View> leadSystemViews = leadApi.retrievePublicSystemViews();
 
-        ArrayList<View> leadViews = leadApi.retrieveLeadSavedViews();
-
-        for (View leadView : leadViews) {
-            ArrayList<Lead> leadsInView = leadApi.leadsInView(leadView);
+        for (View leadView : leadSystemViews) {
+            ArrayList<Lead> leadsInView = leadApi.leadsInView(leadView.getId());
             System.out.println("Leads in view =" + leadView.getName());
+            System.out.println("Type =" + leadView.getQueryType().getValue());
             for (Lead leadInView : leadsInView) {
                 System.out.println("\tleadId =" + leadInView.getId());
             }
         }
+
 
 Contacts
 	
@@ -356,19 +354,43 @@ Contacts
         }
     }
 	
-Retrieving Saved Views for Contacts
 
-        ContactApi contactApi = new ContactApi(service);
-        ArrayList<View> contactViews = contactApi.retrieveSavedViews();
+Retrieving Contacts Views
 
-        for (View contactView : contactViews) {
-            ArrayList<Contact> contactsInView = contactApi.contactsInView(contactView);
-            System.out.println("Contacts in view =" + contactView.getName());
+ContactApi contactApi = new ContactApi(service);
+
+        ArrayList<SavedView> contactSavedViews = contactApi.retrieveSavedViews();
+
+        for (View contactSavedView : contactSavedViews) {
+            ArrayList<Contact> contactsInView = contactApi.contactsInSavedView(contactSavedView.getId());
+            System.out.println("Contacts in view =" + contactSavedView.getName() + " Id:" + contactSavedView.getId());
             for (Contact contactInView : contactsInView) {
-                System.out.println("\tContactId =" + contactInView.getId());
+                System.out.println("\t contactId =" + contactInView.getId());
             }
         }
 
+        ArrayList<View> contactSystemViews = contactApi.retrievePublicSystemViews();
+
+        for (View contactView : contactSystemViews) {
+            ArrayList<Contact> contactsInView = contactApi.contactsInView(contactView.getId());
+            System.out.println("Contacts in view =" + contactView.getName());
+            System.out.println("Type =" + contactView.getQueryType().getValue());
+            for (Contact contactInView : contactsInView) {
+                System.out.println("\t contactId =" + contactInView.getId());
+                Account contactAccount = contactApi.getAccount(contactInView);
+                if(contactAccount != null) {
+                    System.out.println("\t\t account =" + contactAccount.getName());
+                }
+                
+            }
+        }
+		
+Getting contacts' account
+
+		Account contactAccount = contactApi.getAccount(contactInView);
+                if(contactAccount != null) {
+                    System.out.println("\t\t account =" + contactAccount.getName());
+                }
 	
 Retrieving Reports
 

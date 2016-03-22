@@ -4,6 +4,8 @@
 package com.xrm.msdynamics.entities;
 
 import com.xrm.msdynamics.Enums;
+import com.xrm.msdynamics.crmtypes.CrmBoolean;
+import com.xrm.msdynamics.crmtypes.CrmInt;
 import com.xrm.msdynamics.crmtypes.CrmString;
 import com.xrm.msdynamics.crmtypes.Entity;
 import com.xrm.msdynamics.crmtypes.XmlSerializable;
@@ -23,16 +25,31 @@ public class View extends BaseEntity {
     private CrmString returnedtypecode;
     private CrmString name;
 
+    private CrmBoolean isPrivate;
+    private CrmInt queryType;
+
     public static final String ID = "savedqueryid";
     public static final String FETCHXML = "fetchxml";
     public static final String RETURNEDTYPECODE = "returnedtypecode";
+    public static final String ISPRIVATE = "isprivate";
     public static final String NAME = "name";
+    public static final String QUERYTYPE = "querytype";
+    
+    public class ViewType {
+        public static final String MainApplicationView = "0";
+        public static final String AdvancedSearch = "1";
+        public static final String AssociatedView = "2";
+        public static final String QuickFindSearch = "4";
+        public static final String LookupView = "64";
+    }
 
     public static String[] Columns = new String[]{
         ID,
         NAME,
         FETCHXML,
-        RETURNEDTYPECODE
+        RETURNEDTYPECODE,
+        ISPRIVATE,
+        QUERYTYPE
     };
 
     public View(NodeList nodes) {
@@ -68,6 +85,16 @@ public class View extends BaseEntity {
                 break;
             }
 
+            case ISPRIVATE: {
+                this.setIsPrivate(Boolean.parseBoolean(value));
+                break;
+            }
+
+            case QUERYTYPE: {
+                this.setQueryType(Integer.parseInt(value));
+                break;
+            }
+
         }
     }
 
@@ -91,6 +118,14 @@ public class View extends BaseEntity {
 
         if (getReturnedtypecode() != null) {
             parameters.add(getReturnedtypecode());
+        }
+
+        if (getIsPrivate() != null) {
+            parameters.add(getIsPrivate());
+        }
+
+        if (getQueryType() != null) {
+            parameters.add(getQueryType());
         }
 
         return parameters;
@@ -150,6 +185,34 @@ public class View extends BaseEntity {
      */
     public void setName(String name) {
         this.name = new CrmString(NAME, name);
+    }
+
+    /**
+     * @return the isPrivate
+     */
+    public CrmBoolean getIsPrivate() {
+        return isPrivate;
+    }
+
+    /**
+     * @param isPrivate the isPrivate to set
+     */
+    public void setIsPrivate(boolean isPrivate) {
+        this.isPrivate = new CrmBoolean(ISPRIVATE, isPrivate);
+    }
+
+    /**
+     * @return the queryType
+     */
+    public CrmInt getQueryType() {
+        return queryType;
+    }
+
+    /**
+     * @param queryType the queryType to set
+     */
+    public void setQueryType(int queryType) {
+        this.queryType = new CrmInt(QUERYTYPE, queryType);
     }
 
 }
