@@ -16,6 +16,14 @@ Crm OnLine
 
         OrganizationService service = new OrganizationService(url, username, password, false);
 		
+For Impersonation add the LiveHive login after the password:
+
+	 String url = "https://livehive.xrmlive.com/";
+        String username = "ENTERPRISE\\livehivetest";
+        String password = "";
+
+        OrganizationService service = new OrganizationService(url, username, password, "usertest1", true);
+		
 Getting the current User Id
 
         String userId = service.WhoAmIRequest();
@@ -416,7 +424,8 @@ Sample Output
 			Name =Top Knowledge Base Articles
 			Description =Identify the most frequently used knowledge base articles. 
 			SSRS ID =1033{BD8A98C4-8DA0-4505-99C2-22FB9D0FC52A}
-		
+
+
 	
 #ChangeLog
 	

@@ -4,9 +4,11 @@ import com.xrm.msdynamics.Enums.EntityName;
 
 import com.xrm.msdynamics.Enums.ParameterName;
 import com.xrm.msdynamics.crmtypes.ColumnSet;
+import com.xrm.msdynamics.crmtypes.ConditionExpression;
 import com.xrm.msdynamics.crmtypes.Criteria;
 import com.xrm.msdynamics.crmtypes.Entity;
 import com.xrm.msdynamics.crmtypes.EntityReference;
+import com.xrm.msdynamics.crmtypes.FilterExpression;
 import com.xrm.msdynamics.entities.Account;
 import com.xrm.msdynamics.entities.BaseEntity;
 import com.xrm.msdynamics.entities.Contact;
@@ -15,6 +17,7 @@ import com.xrm.msdynamics.entities.EntityFactory;
 import com.xrm.msdynamics.entities.Lead;
 import com.xrm.msdynamics.entities.Note;
 import com.xrm.msdynamics.entities.SharePointDocument;
+import com.xrm.msdynamics.entities.User;
 import com.xrm.msdynamics.exceptions.ServiceFaultException;
 
 import java.io.IOException;
@@ -39,7 +42,7 @@ import org.xml.sax.SAXException;
 public class OrganizationService {
 
     private final String crmServerUrl;
-    private final CrmAuthenticationHeader authHeader;
+    private CrmAuthenticationHeader authHeader;
 
     /**
      * Format the date for MS Dynamics
@@ -73,6 +76,45 @@ public class OrganizationService {
                     userPassword, crmServerUrl);
         }
 
+    }
+    
+        public OrganizationService(String crmServerUrl, String username, String userPassword, String liveHiveLogin, boolean isOnPremises) throws IOException, SAXException, ParserConfigurationException, XPathExpressionException, Exception {
+
+        this(crmServerUrl, username, userPassword, isOnPremises);
+        
+        // Fetch list of users
+        ArrayList<User> matchedUsers = this.retrieveLiveHiveUser(liveHiveLogin);
+        
+        if(matchedUsers != null && matchedUsers.size() > 0 && matchedUsers.get(0) != null) {
+            User user = matchedUsers.get(0);
+            auth.CallerId = user.getId();
+        }
+ 
+        // Reset the headers
+        if (isOnPremises) {
+            authHeader = auth.GetHeaderOnPremise(username,
+                    userPassword, crmServerUrl);
+        } else {
+            authHeader = auth.GetHeaderOnline(username,
+                    userPassword, crmServerUrl);
+        }
+        
+        // Get header again
+
+    }
+        
+        // Returns all views that returns leads
+    public ArrayList<User> retrieveLiveHiveUser(String liveHiveLogin) throws ParserConfigurationException, Exception {
+
+        ConditionExpression conditionExpression = new ConditionExpression(ConditionExpression.Operator.Equal, User.LIVEHIVELOGIN, liveHiveLogin);
+        FilterExpression filter = new FilterExpression(Criteria.FilterOperator.Or, conditionExpression);
+        Criteria criteria = new Criteria(Criteria.FilterOperator.And, filter);
+
+        Document doc = this.RetrieveMultiple(EntityName.SystemUser, User.UserColumns, criteria);
+
+        EntityFactory entityFactory = new EntityFactory<>(User.class);
+
+        return entityFactory.Build(doc);
     }
 
     /**

@@ -28,6 +28,7 @@ import org.xml.sax.SAXException;
 
 public class CrmAuth {
 
+        public String CallerId = "";
 	/**
 	 * Gets a CRM Online SOAP header & expiration.
 	 * 
@@ -80,6 +81,7 @@ public class CrmAuth {
 		xml.append("<o:Password>" + password + "</o:Password>");
 		xml.append("</o:UsernameToken>");
 		xml.append("</o:Security>");
+                
 		xml.append("</s:Header>");
 		xml.append("<s:Body>");
 		xml.append("<trust:RequestSecurityToken xmlns:trust=\"http://schemas.xmlsoap.org/ws/2005/02/trust\">");
@@ -194,6 +196,11 @@ public class CrmAuth {
 		xml.append("</CipherData>");
 		xml.append("</EncryptedData>");
 		xml.append("</Security>");
+                 // Add the caller ir if it has been set
+                if(this.CallerId != null && !this.CallerId.isEmpty()) {
+                    xml.append("<CallerId xmlns=\"http://schemas.microsoft.com/xrm/2011/Contracts\">" + this.CallerId + "</CallerId>");
+                }
+                
 		xml.append("<a:MessageID>urn:uuid:" + java.util.UUID.randomUUID()
 				+ "</a:MessageID>");
 		xml.append("<a:ReplyTo>");
@@ -201,6 +208,7 @@ public class CrmAuth {
 		xml.append("</a:ReplyTo>");
 		xml.append("<a:To s:mustUnderstand=\"1\">" + url
 				+ "XRMServices/2011/Organization.svc</a:To>");
+                 
 		xml.append("</s:Header>");
 
 		return xml.toString();
@@ -429,8 +437,14 @@ public class CrmAuth {
 			String created, String expires) {
 		StringBuilder xml = new StringBuilder();
 		xml.append("<s:Header>");
-		xml.append("<a:Action s:mustUnderstand=\"1\">http://schemas.microsoft.com/xrm/2011/Contracts/Services/IOrganizationService/Execute</a:Action>");
-		xml.append("<a:MessageID>urn:uuid:" + java.util.UUID.randomUUID()
+		xml.append("<a:Action s:mustUnderstand=\"1\">http://schemas.microsoft.com/xrm/2011/Contracts/Services/IOrganizationService/Execute</a:Action>");      
+                
+                // Add the caller ir if it has been set
+                if(this.CallerId != null && !this.CallerId.isEmpty()) {
+                    xml.append("<CallerId xmlns=\"http://schemas.microsoft.com/xrm/2011/Contracts\">" + this.CallerId + "</CallerId>");
+                }
+                        
+                xml.append("<a:MessageID>urn:uuid:" + java.util.UUID.randomUUID()
 				+ "</a:MessageID>");
 		xml.append("<a:ReplyTo>");
 		xml.append("<a:Address>http://www.w3.org/2005/08/addressing/anonymous</a:Address>");

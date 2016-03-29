@@ -28,7 +28,8 @@ public class User extends BaseEntity {
     private CrmString lastName;
     private CrmString organizationId;
 
-    private static final String ID = "systemuserid";
+    public static final String ID = "systemuserid";
+    public static final String LIVEHIVELOGIN = "xrm_livehivelogin";
     private static final String CREATEDON = "createdon";
     private static final String FIRSTNAME = "firstname";
     private static final String LASTNAME = "lastname";
