@@ -228,6 +228,7 @@ public class Contact extends BaseEntity {
                 this.setSpousesName(value);
                 break;
             }
+            /*
             case BIRTHDATE_COLUMN: {
                 this.setBirthdate(value);
                 break;
@@ -235,7 +236,7 @@ public class Contact extends BaseEntity {
             case ANNIVERSARY_COLUMN: {
                 this.setAnniversary(value);
                 break;
-            }
+            }*/
             case DONOTDENDMM_COLUMN: {
                 this.donotsendmm(value);
                 break;
