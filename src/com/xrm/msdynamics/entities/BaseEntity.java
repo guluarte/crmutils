@@ -7,6 +7,7 @@ import com.xrm.msdynamics.crmtypes.XmlSerializable;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;

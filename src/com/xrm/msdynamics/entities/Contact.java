@@ -228,15 +228,7 @@ public class Contact extends BaseEntity {
                 this.setSpousesName(value);
                 break;
             }
-            /*
-            case BIRTHDATE_COLUMN: {
-                this.setBirthdate(value);
-                break;
-            }
-            case ANNIVERSARY_COLUMN: {
-                this.setAnniversary(value);
-                break;
-            }*/
+            
             case DONOTDENDMM_COLUMN: {
                 this.donotsendmm(value);
                 break;
@@ -320,14 +312,6 @@ public class Contact extends BaseEntity {
 
         if (getParentCustomerId()!= null) {
             parameters.add(getParentCustomerId());
-        }
-
-        if (getBirthdate() != null) {
-            parameters.add(getBirthdate());
-        }
-
-        if (getAnniversary() != null) {
-            parameters.add(getAnniversary());
         }
 
         if (getJobTitle() != null) {
@@ -844,57 +828,6 @@ public class Contact extends BaseEntity {
      */
     private void setDoNotPostalMail(boolean doNotPostalMail) {
         this.doNotPostalMail = new CrmBoolean(DONOTPOSTALMAIL_COLUMN, doNotPostalMail);
-    }
-
-    /**
-     * @return the birthdate
-     */
-    public DateTime getBirthdate() {
-        return birthdate;
-    }
-
-    /**
-     * @param birthdate the birthdate to set
-     */
-    private void setBirthdate(String birthdate) {
-        try {
-            this.setBirthdate(DATE_FORMAT.parse(birthdate));
-        } catch (ParseException ex) {
-            Logger.getLogger(Contact.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    /**
-     * @param birthdate the birthdate to set
-     */
-    public void setBirthdate(Date birthdate) {
-        this.anniversary = new DateTime(BIRTHDATE_COLUMN, birthdate);
-
-    }
-
-    /**
-     * @return the anniversary
-     */
-    public DateTime getAnniversary() {
-        return anniversary;
-    }
-
-    /**
-     * @param anniversary the anniversary to set
-     */
-    private void setAnniversary(String anniversary) {
-        try {
-            this.setAnniversary(DATE_FORMAT.parse(anniversary));
-        } catch (ParseException ex) {
-            Logger.getLogger(Contact.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    /**
-     * @param anniversary the anniversary to set
-     */
-    public void setAnniversary(Date anniversary) {
-        this.anniversary = new DateTime(ANNIVERSARY_COLUMN, anniversary);
     }
 
     /**
