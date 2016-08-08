@@ -28,6 +28,13 @@ public class AccountApi {
         this.service = service;
     }
     
+    /**
+     * Retrieves all accounts Use with caution
+     * @return
+     * @throws SAXException
+     * @throws ParserConfigurationException
+     * @throws Exception
+     */
     public ArrayList<Account> retrieveAll() throws SAXException, ParserConfigurationException, Exception {
         Document contactResponseDocument = service.RetrieveAll(Enums.EntityName.Account, Account.AccountColumns, null);
         EntityFactory entityFactory = new EntityFactory<>(Account.class);
@@ -61,14 +68,33 @@ public class AccountApi {
         return retrieveWithCriteria(criteria);
     }
 
+    /**
+     * Retrieves all account that match the ids provided
+     * @param accountsId
+     * @return
+     * @throws Exception
+     */
     public ArrayList<Account> retrieveIn(String[] accountsId) throws Exception {
         return retrieveIn(accountsId, Account.ID_COLUMN);
     }
 
+    /**
+     * Retrieves all accounts that match the email address provided
+     * @param emails
+     * @return
+     * @throws Exception
+     */
     public ArrayList<Account> retrieveInEmailList(String[] emails) throws Exception {
         return retrieveIn(emails, Account.EMAIL_ADDRESS);
     }
     
+    /**
+     * Retrieves the matched account or creates a new one using the default values
+     * @param email
+     * @param defaultAccountValues
+     * @return
+     * @throws Exception
+     */
     public Account retrieveByEmailOrCreate(String email, Account defaultAccountValues) throws Exception {
         ArrayList<Account> matchedAccounts =  retrieveIn(new String[] { email} , Account.EMAIL_ADDRESS);
         
