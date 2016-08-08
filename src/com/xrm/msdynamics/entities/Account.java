@@ -27,6 +27,8 @@ public class Account extends BaseEntity {
     private CrmString tickerSymbol;
     private CrmString description;
 
+    private CrmString emailAddress;
+
     private EntityReference primarycontactid;
     private EntityReference parentAccountId;
 
@@ -39,6 +41,7 @@ public class Account extends BaseEntity {
     public static final String PARENTACCOUNTID = "parentaccountid";
     public static final String TICKERSYMBOL = "tickersymbol";
     public static final String DESCRIPTION = "description";
+    public static final String EMAIL_ADDRESS = "emailaddress1";
 
     public static String[] AccountColumns = new String[]{
         ID_COLUMN,
@@ -49,8 +52,8 @@ public class Account extends BaseEntity {
         WEBSITEURL,
         PARENTACCOUNTID,
         TICKERSYMBOL,
-        DESCRIPTION
-    };
+        DESCRIPTION,
+        EMAIL_ADDRESS,};
 
     public Account() {
 
@@ -102,7 +105,12 @@ public class Account extends BaseEntity {
                 this.setDescription(value);
                 break;
             }
-            
+
+            case EMAIL_ADDRESS: {
+                this.setEmailAddress(value);
+                break;
+            }
+
         }
     }
 
@@ -122,29 +130,33 @@ public class Account extends BaseEntity {
         if (getName() != null) {
             options.add(getName());
         }
-        
-        if (getTelephone()!= null) {
+
+        if (getTelephone() != null) {
             options.add(getTelephone());
         }
-        
-        if (getFax()!= null) {
+
+        if (getFax() != null) {
             options.add(getFax());
         }
-        
-        if (getWebsiteUrl()!= null) {
+
+        if (getWebsiteUrl() != null) {
             options.add(getWebsiteUrl());
         }
-        
-        if (getParentAccountId()!= null) {
+
+        if (getParentAccountId() != null) {
             options.add(getParentAccountId());
         }
-        
-        if (getTickerSymbol()!= null) {
+
+        if (getTickerSymbol() != null) {
             options.add(getTickerSymbol());
         }
-        
-        if (getDescription()!= null) {
+
+        if (getDescription() != null) {
             options.add(getDescription());
+        }
+
+        if (getEmailAddress() != null) {
+            options.add(getEmailAddress());
         }
 
         return options;
@@ -275,6 +287,20 @@ public class Account extends BaseEntity {
      */
     public void setParentAccountId(String parentAccountId) {
         this.parentAccountId = new EntityReference(EntityName.Account, PARENTACCOUNTID, parentAccountId);
+    }
+
+    /**
+     * @return the emailAddress
+     */
+    public CrmString getEmailAddress() {
+        return emailAddress;
+    }
+
+    /**
+     * @param emailAddress the emailAddress to set
+     */
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = new CrmString(EMAIL_ADDRESS, emailAddress);
     }
 
 }

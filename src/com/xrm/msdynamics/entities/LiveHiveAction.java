@@ -46,6 +46,7 @@ public class LiveHiveAction extends BaseEntity {
 
     private EntityReference leadId;
     private EntityReference contactId;
+    private EntityReference accountId;
     private EntityReference opportunityId;
 
     public static final String ID = "xrm_livehiveactionid";
@@ -60,6 +61,7 @@ public class LiveHiveAction extends BaseEntity {
     public static final String LEAD_ID = "xrm_leadid";
     public static final String OPPORTUNITY_ID = "xrm_opportunityid";
     public static final String CONTACT_ID = "xrm_contactid";
+    public static final String ACCOUNT_ID = "xrm_accountid";
     public static final String ATTACHMENT_PAGE_VIEWS = "xrm_attachmentpageviews";
     public static final String ATTACHMENT_PAGE_VIEWS_DISPLAY = "xrm_attachmentpageviewsdisplay";
     public static final String ATTACHMENTS_LIST = "xrm_attachmentlist";
@@ -77,6 +79,7 @@ public class LiveHiveAction extends BaseEntity {
         LEAD_ID,
         OPPORTUNITY_ID,
         CONTACT_ID,
+        ACCOUNT_ID,
         ATTACHMENT_PAGE_VIEWS,
         ATTACHMENT_PAGE_VIEWS_DISPLAY,
         ATTACHMENTS_LIST,
@@ -163,6 +166,12 @@ public class LiveHiveAction extends BaseEntity {
                 setContactId(value);
                 break;
             }
+            
+            case ACCOUNT_ID: {
+                setAccountId(value);
+                break;
+            }
+            
             case ATTACHMENT_PAGE_VIEWS: {
                 setAttachmentPageViews(Integer.parseInt(value));
                 break;
@@ -242,6 +251,10 @@ public class LiveHiveAction extends BaseEntity {
 
         if (getContactId() != null) {
             parameters.add(getContactId());
+        }
+        
+        if (getAccountId()!= null) {
+            parameters.add(getAccountId());
         }
 
         if (getOpportunityId() != null) {
@@ -505,6 +518,20 @@ public class LiveHiveAction extends BaseEntity {
      */
     public void setActionName(String actionName) {
         this.actionName = new CrmString(ACTIONNAME, actionName);
+    }
+
+    /**
+     * @return the accountId
+     */
+    public EntityReference getAccountId() {
+        return accountId;
+    }
+
+    /**
+     * @param contactId
+     */    
+    public void setAccountId(String contactId) {
+        this.contactId = new EntityReference(EntityName.Account, ACCOUNT_ID, contactId);
     }
 
 }
