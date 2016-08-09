@@ -430,7 +430,7 @@ Creating Email and Appointments
         service.CreateAppointment("Test appointment for account", "Description", Calendar.getInstance().getTime(), Calendar.getInstance().getTime(), "House", userId, account.getLogicalName(), account.getId(), Enums.EmailPriority.High);
 		
 
-Search or Create an Account by Email
+Search or Create an Account by Email (for Retrieving a list of accounts user AccountApi.retrieveInEmailList)
 
     public static void testSearchAccountByEmailOrCreateDefault(OrganizationService service) throws Exception {
         AccountApi accountApi = new AccountApi(service);
