@@ -28,7 +28,7 @@ Getting the current User Id
 
         String userId = service.WhoAmIRequest();
 		
- Creating a LiveHive Contact (for leads use LiveHiveLead)
+ Creating a LiveHive Contact (for leads use LiveHiveLead and for Accounts LiveHiveAccount)
  
         LiveHiveContact liveHiveContact = new LiveHiveContact();
         
@@ -140,7 +140,16 @@ Creating LiveHive Actions
         liveHiveAction.setLocation("California");
         liveHiveAction.setAttachmentList("document.docx, errorlist.xlsx");
         liveHiveAction.setAttachmentPageViews(950);
+
+        // For Associating a LiveHiveAction with a lead 
         liveHiveAction.setLeadId(lead.getId());
+
+        // For Associating a LiveHiveAction with a contact 
+        //liveHiveAction.setContactId();
+
+        // For Associating a LiveHiveAction with an account 
+        //liveHiveAction.setAccountId();
+        
         liveHiveAction.setId(service.Create(liveHiveAction.toEntity()));
         
         System.out.println("liveHiveAction " + liveHiveAction.getId());
@@ -399,6 +408,158 @@ Getting contacts' account
                 if(contactAccount != null) {
                     System.out.println("\t\t account =" + contactAccount.getName());
                 }
+
+                
+	
+Accounts
+
+Creating Email and Appointments
+
+        AccountApi accoutnApi = new AccountApi(service);
+
+        // Retrieving all contacts
+        ArrayList<Account> accounts = accoutnApi.retrieveAll();
+
+        // Retrieving a single contact by id
+        Account account = accounts.get(0);
+
+        String emailId = service.CreateCustomEmailActivity(account.getLogicalName(), account.getId(), userId, "Test subject for Account", "Test body", Enums.EmailPriority.High, Calendar.getInstance().getTime());
+
+        System.out.println("Created Custom Email activity for account: " + emailId);
+
+        service.CreateAppointment("Test appointment for account", "Description", Calendar.getInstance().getTime(), Calendar.getInstance().getTime(), "House", userId, account.getLogicalName(), account.getId(), Enums.EmailPriority.High);
+		
+
+Search or Create an Account by Email
+
+    public static void testSearchAccountByEmailOrCreateDefault(OrganizationService service) throws Exception {
+        AccountApi accountApi = new AccountApi(service);
+
+        Account defaultAccountSettings = new Account();
+
+        defaultAccountSettings.setName("Test Search");
+
+        Account createdOrRetrievedAccount = accountApi.retrieveByEmailOrCreate("testseachemail@xrm.com", defaultAccountSettings);
+
+        System.out.println("Account Retrieved or Created: " + createdOrRetrievedAccount.getId());
+
+    }
+	
+
+	
+Create and Update a LiveHiveAccount (Account with the extra LiveHive Fields)
+
+    public static void testLiveHiveAccount(OrganizationService service) throws Exception {
+
+        LiveHiveAccount account = new LiveHiveAccount();
+
+        account.setName("Test");
+
+        account.setEmailAddress("testest@xrm.com");
+
+        account.setXrmLiveHiveScore(1.5);
+        account.setXrmLiveHiveClosingScore(2.6);
+        account.setXrmLiveHiveChangeInMetric(5);
+        account.setXrmLiveHiveLastView(2000);
+        account.setXrmLiveHiveClosingMetric(5);
+        account.setXrmLiveHiveLastShare(10003);
+        account.setXrmLiveHiveMetric(5);
+        account.setXrmLiveHiveState("STATE");
+        account.setXrmLiveHiveChangeInScore(3.6);
+        
+        account.setEngagementDisplayOnly("3.0 out of 5");
+        account.setRecentChangeDisplayOnly("150.0%");
+
+        Calendar cal = Calendar.getInstance();
+
+        account.setXrmLiveHiveLastViewOn(cal.getTime());
+        account.setXrmLiveHiveLastShareOn(cal.getTime());
+
+        account.setId(service.Create(account.toEntity()));
+
+        System.out.println("Created LiveHive Account: " + account.getId());
+
+        NodeList nodes = service.Retrieve(EntityName.Account, account.getId(), LiveHiveAccount.AccountColumns);
+        LiveHiveAccount retrievedAccount = new LiveHiveAccount(nodes);
+
+        /* Update account */
+        retrievedAccount.setName("Test Updated account");
+
+        service.Update(retrievedAccount.toEntity());
+
+        System.out.println("Updated LiveHive Account: " + retrievedAccount.getId());
+
+    }
+	
+
+LiveHive Actions for Accounts
+
+        public static void testLiveHiveActionForAccount(OrganizationService service) throws ParserConfigurationException, IllegalAccessException, Exception, InstantiationException {
+        Calendar cal = Calendar.getInstance();
+
+        LiveHiveAccount liveHiveAccount = new LiveHiveAccount();
+        liveHiveAccount.setName("Test LiveHive account With metrics");
+
+        liveHiveAccount.setXrmLiveHiveScore(1.3);
+        liveHiveAccount.setXrmLiveHiveClosingScore(3.6);
+        liveHiveAccount.setXrmLiveHiveChangeInMetric(3);
+        liveHiveAccount.setXrmLiveHiveLastView(1000);
+        liveHiveAccount.setXrmLiveHiveClosingMetric(6);
+        liveHiveAccount.setXrmLiveHiveLastShare(10002);
+        liveHiveAccount.setXrmLiveHiveMetric(4);
+        liveHiveAccount.setXrmLiveHiveState("STATE");
+        liveHiveAccount.setXrmLiveHiveChangeInScore(3.5);
+        liveHiveAccount.setXrmLiveHiveLastViewOn(cal.getTime());
+        liveHiveAccount.setXrmLiveHiveLastShareOn(cal.getTime());
+
+        liveHiveAccount.setEngagementDisplayOnly("4.0 out of 5");
+        liveHiveAccount.setRecentChangeDisplayOnly("890.0%");
+
+        liveHiveAccount.setId(service.Create(liveHiveAccount.toEntity()));
+
+        System.out.println("account " + liveHiveAccount.getId());
+
+        Document livehiveActionResponseDocument = service.RetrieveAll(EntityName.LiveHiveAction, LiveHiveAction.DefaultColumns, null);
+        EntityFactory entityFactory = new EntityFactory<>(LiveHiveAction.class);
+        ArrayList<LiveHiveAction> liveHiveActions = entityFactory.Build(livehiveActionResponseDocument);
+        
+        LiveHiveAction liveHiveAction = new LiveHiveAction();
+        //liveHiveAction.setName("Test Action 2 complete");
+        liveHiveAction.setListOfRecipientEmailAddresses("email1@xrm.com, email1@xrm.com, email1@xrm.com, email1@xrm.com");
+        liveHiveAction.setEmailBody("body 2");
+        liveHiveAction.setName("Action Name");
+        liveHiveAction.setEmailSubject("Email Subject 2");
+        liveHiveAction.setEmailSender("rodolfo@xrm.com");
+        liveHiveAction.setActionType(LiveHiveAction.ActionType.Email);
+        liveHiveAction.setActionDate(cal.getTime());
+        liveHiveAction.setLocation("California");
+        liveHiveAction.setAttachmentList("document.docx, errorlist.xlsx");
+        liveHiveAction.setAttachmentPageViews(950);
+        liveHiveAction.setActionName("Test action name");
+        liveHiveAction.setAccountId(liveHiveAccount.getId());
+        liveHiveAction.setId(service.Create(liveHiveAction.toEntity()));
+        liveHiveAction.setAttachmentPageviewsDisplay("950 pageviews");
+
+        System.out.println("liveHiveAction for account " + liveHiveAction.getId());
+    }
+	
+
+LiveHiveAccounts Retrieval
+
+    private static void testLiveHiveAccountRetrieval(OrganizationService service) throws SAXException, ParserConfigurationException, Exception {
+        
+        Document livehiveActionResponseDocument = service.RetrieveAll(EntityName.Account, LiveHiveAccount.LiveHiveAccountColumns, null);
+        EntityFactory entityFactory = new EntityFactory<>(LiveHiveAccount.class);
+        ArrayList<LiveHiveAccount> liveHiveAccounts = entityFactory.Build(livehiveActionResponseDocument);
+        
+        System.out.println("LiveHiveAccounts retrieved");
+        
+        for (LiveHiveAccount liveHiveAccount : liveHiveAccounts) {
+            System.out.println("LiveHiveAccount for account " + liveHiveAccount.getName());
+        }
+    }
+
+
 	
 Retrieving Reports
 
