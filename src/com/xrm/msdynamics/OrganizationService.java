@@ -1061,7 +1061,7 @@ public class OrganizationService {
      * @param timestamp
      * @return
      */
-    public String CreateCustomEmailActivity(String entityName, String toId, String fromId, String subject, String body, int priority, Date timestamp) throws SAXException, ParserConfigurationException, Exception {
+    public String CreateEmailActivity(String entityName, String toId, String fromId, String subject, String body, int priority, Date timestamp) throws SAXException, ParserConfigurationException, Exception {
 
         String request = "<s:Body>\n"
                 + "    <Execute xmlns=\"http://schemas.microsoft.com/xrm/2011/Contracts/Services\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">\n"
