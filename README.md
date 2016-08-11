@@ -444,7 +444,57 @@ Search or Create an Account by Email (for Retrieving a list of accounts user Acc
         System.out.println("Account Retrieved or Created: " + createdOrRetrievedAccount.getId());
 
     }
-	
+
+Retrieving a single account by its primary contact or contact's email addresses
+WARNING: Contacts can be associated with multiple accounts, this method returns the first account that match otherwise null.
+
+        Account retrievedAccountByEmailAddress = accountApi.retreiveAccountByContactEmailAddress("cathan@alpineskihouse.com");
+        
+        if(retrievedAccountByEmailAddress != null) {
+            System.out.println("Single Account Retrieved by Email: " + retrievedAccountByEmailAddress.getName() + " " + retrievedAccountByEmailAddress.getId());
+        }
+        
+Retrieving accounts by its primary contact or contact's email addresses
+
+        ArrayList<Account> retrievedAccountsByEmailAddress = accountApi.retreiveAccountsByContactEmailAddress("cathan@alpineskihouse.com");
+        
+        for (Account retrievedAccount : retrievedAccountsByEmailAddress) {
+            System.out.println("Multiple Account Retrieved by Email: " + retrievedAccount.getName() + " " + retrievedAccount.getId() );
+        }
+        
+
+Retrieves a single account using its contacts email addresses otherwise creates a new one if there are no matches.
+
+        Contact defaultContactSettingsForContactEmailRetrieval = new Contact();
+        defaultContactSettingsForContactEmailRetrieval.setFirstname("test");
+        defaultContactSettingsForContactEmailRetrieval.setLastname("test");
+        
+        Account defaultAccountSettingsForContactEmailRetrieval = new Account();
+        defaultAccountSettingsForContactEmailRetrieval.setName("test account");
+        
+        Account retrievedOrCreateAccountByEmailAddress = accountApi.retreiveAccountByContactEmailAddressOrCreateContact("fdhgdfh@xrm.com", defaultContactSettingsForContactEmailRetrieval, defaultAccountSettingsForContactEmailRetrieval);
+        
+        if(retrievedOrCreateAccountByEmailAddress != null) {
+            System.out.println("Single Account Retrieved Or Created by Email: " + retrievedOrCreateAccountByEmailAddress.getName() + " " + retrievedOrCreateAccountByEmailAddress.getId());
+        }
+        
+
+Retrieves accounts using its contacts email addresses otherwise creates a new one if there are no matches.
+
+        Contact defaultContactSettingsForMultipleRetrieval = new Contact();
+        defaultContactSettingsForMultipleRetrieval.setFirstname("test");
+        defaultContactSettingsForMultipleRetrieval.setLastname("test");
+        
+        Account defaultAccoutnSettingsForMultipleRetrieval = new Account();
+        defaultAccoutnSettingsForMultipleRetrieval.setName("test account");
+        
+        ArrayList<Account> retrievedOrCreateAccountsByEmailAddress = accountApi.retreiveAccountsByContactEmailAddressOrCreateContact("cathan@alpineskihouse.com", defaultContactSettingsForMultipleRetrieval, defaultAccoutnSettingsForMultipleRetrieval);
+        
+        for (Account retrievedAccount : retrievedOrCreateAccountsByEmailAddress) {
+            System.out.println("Multiple Account Retrieved Or Created by Email: " + retrievedAccount.getName() + " " + retrievedAccount.getId() );
+        }
+        
+
 
 	
 Create and Update a LiveHiveAccount (Account with the extra LiveHive Fields)
