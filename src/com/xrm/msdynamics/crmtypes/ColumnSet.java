@@ -1,5 +1,7 @@
 package com.xrm.msdynamics.crmtypes;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 /**
  *
  * @author rguluarte
@@ -16,7 +18,7 @@ public class ColumnSet implements XmlSerializable {
         StringBuilder sb = new StringBuilder();
 
         for (String column : columns) {
-            sb.append("<c:string>").append(column).append("</c:string>\n");
+            sb.append("<c:string>").append(StringEscapeUtils.escapeXml(column)).append("</c:string>\n");
         }
 
         return sb.toString();

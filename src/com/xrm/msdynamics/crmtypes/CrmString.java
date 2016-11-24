@@ -1,5 +1,7 @@
 package com.xrm.msdynamics.crmtypes;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 /**
  *
  * @author rguluarte
@@ -15,8 +17,8 @@ public class CrmString extends BaseType {
     @Override
     public String ToXML() {        
         return "<a:KeyValuePairOfstringanyType>\n" +
-"                 <b:key>"+this.name+"</b:key>\n" +
-"                 <b:value i:type=\"c:string\" xmlns:c=\"http://www.w3.org/2001/XMLSchema\">"+this.value.replace("<", "&lt;").replace(">", "&gt;")+"</b:value>\n" +
+"                 <b:key>"+ StringEscapeUtils.escapeXml(this.name) +"</b:key>\n" +
+"                 <b:value i:type=\"c:string\" xmlns:c=\"http://www.w3.org/2001/XMLSchema\">"+ StringEscapeUtils.escapeXml(this.value) +"</b:value>\n" +
 "               </a:KeyValuePairOfstringanyType>\n";
     }
 

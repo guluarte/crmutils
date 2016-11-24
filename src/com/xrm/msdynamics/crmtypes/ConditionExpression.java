@@ -3,6 +3,8 @@
  */
 package com.xrm.msdynamics.crmtypes;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 /**
  *
  * @author rguluarte
@@ -27,10 +29,10 @@ public class ConditionExpression extends BaseType {
     @Override
     public String ToXML() {
         return "<a:ConditionExpression>\n"
-                + "                        <a:AttributeName>" + atributeName + "</a:AttributeName>\n"
+                + "                        <a:AttributeName>" + StringEscapeUtils.escapeXml(atributeName) + "</a:AttributeName>\n"
                 + "                        <a:Operator>" + operator + "</a:Operator>\n"
                 + "                        <a:Values xmlns:c=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">\n"
-                + "                          <c:anyType i:type=\"d:string\" xmlns:d=\"http://www.w3.org/2001/XMLSchema\">" + value + "</c:anyType>\n"
+                + "                          <c:anyType i:type=\"d:string\" xmlns:d=\"http://www.w3.org/2001/XMLSchema\">" + StringEscapeUtils.escapeXml(value) + "</c:anyType>\n"
                 + "                        </a:Values>\n"
                 + "</a:ConditionExpression>\n";
     }

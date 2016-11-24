@@ -1,6 +1,7 @@
 package com.xrm.msdynamics.crmtypes;
 
 import java.math.BigDecimal;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
  *
@@ -16,7 +17,7 @@ public class Money extends BaseType {
     @Override
     public String ToXML() {
         return "<a:KeyValuePairOfstringanyType>\n" +
-"            <b:key>"+this.key+"</b:key>\n" +
+"            <b:key>"+ StringEscapeUtils.escapeXml(this.key) +"</b:key>\n" +
 "            <b:value i:type=\"a:Money\">\n" +
 "               <a:Value>"+this.value.toPlainString()+"</a:Value>\n" +
 "            </b:value>\n" +

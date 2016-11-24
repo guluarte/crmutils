@@ -1,5 +1,7 @@
 package com.xrm.msdynamics.crmtypes;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 /**
  *
  * @author rguluarte
@@ -17,7 +19,7 @@ public class OptionSetValue extends BaseType {
     @Override
     public String ToXML() {
         return "<a:KeyValuePairOfstringanyType>\n" +
-                "<b:key>"+this.key+"</b:key>\n" +
+                "<b:key>"+ StringEscapeUtils.escapeXml(this.key) +"</b:key>\n" +
                 "<b:value i:type=\"a:OptionSetValue\">\n" +
                 "<a:Value>"+this.value+"</a:Value>\n" +
                 "</b:value>\n" +

@@ -2,6 +2,7 @@ package com.xrm.msdynamics.crmtypes;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
  *
@@ -26,7 +27,7 @@ public class DateTime extends BaseType {
     @Override
     public String ToXML() {
         return "<a:KeyValuePairOfstringanyType>\n" +
-                "<b:key>"+this.key+"</b:key>\n" +
+                "<b:key>"+ StringEscapeUtils.escapeXml(this.key) +"</b:key>\n" +
                 "<b:value i:type=\"c:dateTime\" xmlns:c=\"http://www.w3.org/2001/XMLSchema\">"+DATE_FORMAT.format(value)+"</b:value>\n" +
                 "</a:KeyValuePairOfstringanyType>\n";
     }

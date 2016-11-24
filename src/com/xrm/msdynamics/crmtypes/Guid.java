@@ -1,5 +1,7 @@
 package com.xrm.msdynamics.crmtypes;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 /**
  *
  * @author rguluarte
@@ -23,7 +25,7 @@ public class Guid extends BaseType {
     @Override
     public String ToXML() {
         return "<a:KeyValuePairOfstringanyType>\n"
-                + "<b:key>" + this.key + "</b:key>\n"
+                + "<b:key>" + StringEscapeUtils.escapeXml(this.key) + "</b:key>\n"
                 + "<b:value i:type=\"c:guid\" xmlns:c=\"http://schemas.microsoft.com/2003/10/Serialization/\">" + this.value + "</b:value>\n"
                 + " </a:KeyValuePairOfstringanyType>\n";
     }
