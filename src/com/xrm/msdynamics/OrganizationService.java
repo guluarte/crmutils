@@ -146,7 +146,7 @@ public class OrganizationService {
         try {
             xDoc = CrmExecuteSoap.ExecuteSoapRequest(authHeader, request, crmServerUrl);
         } catch (Exception e) {
-            Logger.getLogger(OrganizationService.class.getName()).info(request);
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).info(request);
         }
         if (xDoc == null) {
             return null;
@@ -1052,7 +1052,7 @@ public class OrganizationService {
         try {
             xDoc = CrmExecuteSoap.ExecuteSoapRequest(authHeader, request, crmServerUrl);
         } catch (Exception e) {
-            Logger.getLogger(OrganizationService.class.getName()).info(request);
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).info(request);
         }
         if (xDoc == null) {
             return null;
@@ -1193,7 +1193,7 @@ public class OrganizationService {
         try {
             xDoc = CrmExecuteSoap.ExecuteSoapRequest(authHeader, request, crmServerUrl);
         } catch (Exception e) {
-            Logger.getLogger(OrganizationService.class.getName()).info(request);
+           Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).info(request);
         }
         if (xDoc == null) {
             return null;
