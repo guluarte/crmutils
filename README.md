@@ -23,6 +23,19 @@ For Impersonation add the LiveHive login after the password:
         String password = "";
 
         OrganizationService service = new OrganizationService(url, username, password, "usertest1", true);
+
+Exceptions and ServiceFaults
+
+    Exceptions thrown by MS Dynamics are wrapped in with the Exception Class ServiceFaultException
+    The Exception message contains both the request and the response
+
+    The class contains the following methods:
+
+    getResponse()
+    getRequest()
+    getStatusCode()
+    getHttpURLConnection()
+
 		
 Getting the current User Id
 
