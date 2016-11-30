@@ -1,5 +1,6 @@
 package com.xrm.msdynamics;
 
+import com.xrm.msdynamics.entities.LiveHiveLead;
 import com.xrm.msdynamics.exceptions.ServiceFaultException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -8,6 +9,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -58,6 +60,8 @@ public class CrmExecuteSoap {
         out.write(reqStr, 0, len);
         out.flush();
         
+        Logger.getLogger(CrmExecuteSoap.class.getName()).info(reqStr);
+        
         if (rc.getResponseCode() != 200) {
             try (InputStreamReader read = new InputStreamReader(rc.getErrorStream())) {
                 StringBuilder sb = new StringBuilder();
@@ -68,7 +72,11 @@ public class CrmExecuteSoap {
                 }
                 String response = sb.toString();
                 
-                throw new ServiceFaultException(response);
+                ServiceFaultException serviceFault = buildServiceFaultException(reqStr, response, rc);
+                
+                Logger.getLogger(CrmExecuteSoap.class.getName()).info(serviceFault.getMessage());
+                
+                throw serviceFault;
             }
             
         }
@@ -90,5 +98,22 @@ public class CrmExecuteSoap {
                 .parse(new ByteArrayInputStream(response.getBytes()));
 
         return doc;
+    }
+
+    private static ServiceFaultException buildServiceFaultException(String reqStr, String response, HttpURLConnection rc) throws IOException {
+        StringBuilder exceptionMessage = new StringBuilder();
+        exceptionMessage.append("Request: ");
+        exceptionMessage.append(System.lineSeparator());
+        exceptionMessage.append(reqStr);
+        exceptionMessage.append(System.lineSeparator());
+        exceptionMessage.append("Response: ");
+        exceptionMessage.append(System.lineSeparator());
+        exceptionMessage.append(response);
+        ServiceFaultException serviceFault = new ServiceFaultException(exceptionMessage.toString());
+        serviceFault.setRequest(reqStr);
+        serviceFault.setStatusCode(rc.getResponseCode());
+        serviceFault.setResponse(response);
+        serviceFault.setHttpURLConnection(rc);
+        return serviceFault;
     }
 }

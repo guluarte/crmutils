@@ -25,6 +25,7 @@ import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Logger;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
@@ -145,7 +146,7 @@ public class OrganizationService {
         try {
             xDoc = CrmExecuteSoap.ExecuteSoapRequest(authHeader, request, crmServerUrl);
         } catch (Exception e) {
-            log.info(request);
+            Logger.getLogger(OrganizationService.class.getName()).info(request);
         }
         if (xDoc == null) {
             return null;
@@ -1051,7 +1052,7 @@ public class OrganizationService {
         try {
             xDoc = CrmExecuteSoap.ExecuteSoapRequest(authHeader, request, crmServerUrl);
         } catch (Exception e) {
-            log.info(request);
+            Logger.getLogger(OrganizationService.class.getName()).info(request);
         }
         if (xDoc == null) {
             return null;
@@ -1192,7 +1193,7 @@ public class OrganizationService {
         try {
             xDoc = CrmExecuteSoap.ExecuteSoapRequest(authHeader, request, crmServerUrl);
         } catch (Exception e) {
-            log.info(request);
+            Logger.getLogger(OrganizationService.class.getName()).info(request);
         }
         if (xDoc == null) {
             return null;
