@@ -141,9 +141,15 @@ public class OrganizationService {
                 + "     </request>\n"
                 + "   </Execute>\n"
                 + " </s:Body>";
-
-        Document xDoc = CrmExecuteSoap.ExecuteSoapRequest(authHeader, request, crmServerUrl);
-
+        Document xDoc = null;
+        try {
+            xDoc = CrmExecuteSoap.ExecuteSoapRequest(authHeader, request, crmServerUrl);
+        } catch (Exception e) {
+            log.info(request);
+        }
+        if (xDoc == null) {
+            return null;
+        }
         return getAttributeValue(xDoc, "id");
     }
 
@@ -1040,8 +1046,13 @@ public class OrganizationService {
                 + "    </Execute>\n"
                 + "  </s:Body>";
 
-        Document xDoc = CrmExecuteSoap.ExecuteSoapRequest(authHeader, request, crmServerUrl);
 
+        Document xDoc = null;
+        try {
+            xDoc = CrmExecuteSoap.ExecuteSoapRequest(authHeader, request, crmServerUrl);
+        } catch (Exception e) {
+            log.info(request);
+        }
         if (xDoc == null) {
             return null;
         }
@@ -1177,12 +1188,15 @@ public class OrganizationService {
                 + "    </Execute>\n"
                 + "  </s:Body>";
 
-        Document xDoc = CrmExecuteSoap.ExecuteSoapRequest(authHeader, request, crmServerUrl);
-
+        Document xDoc = null;
+        try {
+            xDoc = CrmExecuteSoap.ExecuteSoapRequest(authHeader, request, crmServerUrl);
+        } catch (Exception e) {
+            log.info(request);
+        }
         if (xDoc == null) {
             return null;
         }
-
         return getAttributeValue(xDoc, "id");
     }
 
