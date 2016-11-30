@@ -60,7 +60,7 @@ public class CrmExecuteSoap {
         out.write(reqStr, 0, len);
         out.flush();
         
-        Logger.getLogger(CrmExecuteSoap.class.getName()).info(reqStr);
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).info(reqStr);
         
         if (rc.getResponseCode() != 200) {
             try (InputStreamReader read = new InputStreamReader(rc.getErrorStream())) {
@@ -74,7 +74,7 @@ public class CrmExecuteSoap {
                 
                 ServiceFaultException serviceFault = buildServiceFaultException(reqStr, response, rc);
                 
-                Logger.getLogger(CrmExecuteSoap.class.getName()).info(serviceFault.getMessage());
+                Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).info(serviceFault.getMessage());
                 
                 throw serviceFault;
             }
