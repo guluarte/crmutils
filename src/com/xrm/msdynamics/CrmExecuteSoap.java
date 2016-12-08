@@ -19,6 +19,13 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 public class CrmExecuteSoap {
+
+    public static int TimeOut = 4;
+
+    public static void SetTimeOut(int minutes) {
+        CrmExecuteSoap.TimeOut = minutes;
+    }
+
     /**
      * Executes the SOAP request.
      *
@@ -45,8 +52,8 @@ public class CrmExecuteSoap {
 
         URL SoapURL = new URL(url + "XRMServices/2011/Organization.svc");
         HttpURLConnection rc = (HttpURLConnection) SoapURL.openConnection();
-        int timeout = 1000 * (120); //two minnutes
-        rc.setConnectTimeout( timeout );
+        int timeout = 1000 * (60 * CrmExecuteSoap.TimeOut); // four minutes 
+        rc.setConnectTimeout(timeout);
         rc.setRequestMethod("POST");
         rc.setDoOutput(true);
         rc.setDoInput(true);
@@ -61,7 +68,7 @@ public class CrmExecuteSoap {
         out.flush();
         
         Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).info(reqStr);
-        
+
         if (rc.getResponseCode() != 200) {
             try (InputStreamReader read = new InputStreamReader(rc.getErrorStream())) {
                 StringBuilder sb = new StringBuilder();
@@ -71,25 +78,26 @@ public class CrmExecuteSoap {
                     ch = read.read();
                 }
                 String response = sb.toString();
-                
+
                 ServiceFaultException serviceFault = buildServiceFaultException(reqStr, response, rc);
-                
+
                 Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).info(serviceFault.getMessage());
-                
+
                 throw serviceFault;
             }
-            
+
         }
 
         String response;
-         try (InputStreamReader read = new InputStreamReader(rc.getInputStream())) {
-             StringBuilder sb = new StringBuilder();
-             int ch = read.read();
-             while (ch != -1) {
-                 sb.append((char) ch);
-                 ch = read.read();
-             }    response = sb.toString();
-         }
+        try (InputStreamReader read = new InputStreamReader(rc.getInputStream())) {
+            StringBuilder sb = new StringBuilder();
+            int ch = read.read();
+            while (ch != -1) {
+                sb.append((char) ch);
+                ch = read.read();
+            }
+            response = sb.toString();
+        }
 
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory
                 .newInstance();
@@ -102,16 +110,44 @@ public class CrmExecuteSoap {
 
     private static ServiceFaultException buildServiceFaultException(String reqStr, String response, HttpURLConnection rc) throws IOException {
         StringBuilder exceptionMessage = new StringBuilder();
+
+        exceptionMessage.append("Status Code: ");
+        exceptionMessage.append("[");
+
+        if (rc == null) {
+            exceptionMessage.append("Empty HttpURLConnection object");
+        } else {
+            exceptionMessage.append(rc.getResponseCode());
+        }
+        
+        exceptionMessage.append("]");
+        exceptionMessage.append(System.lineSeparator());
         exceptionMessage.append("Request: ");
         exceptionMessage.append(System.lineSeparator());
+        exceptionMessage.append("[");
         exceptionMessage.append(reqStr);
+        exceptionMessage.append("]");
         exceptionMessage.append(System.lineSeparator());
         exceptionMessage.append("Response: ");
         exceptionMessage.append(System.lineSeparator());
-        exceptionMessage.append(response);
+
+        exceptionMessage.append("[");
+
+        if (response == null || response.isEmpty()) {
+            exceptionMessage.append("Empty Response");
+        } else {
+            exceptionMessage.append(response);
+        }
+
+        exceptionMessage.append("]");
+
         ServiceFaultException serviceFault = new ServiceFaultException(exceptionMessage.toString());
         serviceFault.setRequest(reqStr);
-        serviceFault.setStatusCode(rc.getResponseCode());
+        
+        if (rc != null) {
+            serviceFault.setStatusCode(rc.getResponseCode());
+        }
+        
         serviceFault.setResponse(response);
         serviceFault.setHttpURLConnection(rc);
         return serviceFault;

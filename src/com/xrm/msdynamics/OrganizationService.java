@@ -79,19 +79,19 @@ public class OrganizationService {
         }
 
     }
-    
-        public OrganizationService(String crmServerUrl, String username, String userPassword, String liveHiveLogin, boolean isOnPremises) throws IOException, SAXException, ParserConfigurationException, XPathExpressionException, Exception {
+
+    public OrganizationService(String crmServerUrl, String username, String userPassword, String liveHiveLogin, boolean isOnPremises) throws IOException, SAXException, ParserConfigurationException, XPathExpressionException, Exception {
 
         this(crmServerUrl, username, userPassword, isOnPremises);
-        
+
         // Fetch list of users
         ArrayList<User> matchedUsers = this.retrieveLiveHiveUser(liveHiveLogin);
-        
-        if(matchedUsers != null && matchedUsers.size() > 0 && matchedUsers.get(0) != null) {
+
+        if (matchedUsers != null && matchedUsers.size() > 0 && matchedUsers.get(0) != null) {
             User user = matchedUsers.get(0);
             auth.CallerId = user.getId();
         }
- 
+
         // Reset the headers
         if (isOnPremises) {
             authHeader = auth.GetHeaderOnPremise(username,
@@ -100,12 +100,15 @@ public class OrganizationService {
             authHeader = auth.GetHeaderOnline(username,
                     userPassword, crmServerUrl);
         }
-        
-        // Get header again
 
+        // Get header again
     }
-        
-        // Returns all views that returns leads
+
+    public void setTimeOut(int minutes) {
+        CrmExecuteSoap.TimeOut = minutes;
+    }
+
+    // Returns all views that returns leads
     public ArrayList<User> retrieveLiveHiveUser(String liveHiveLogin) throws ParserConfigurationException, Exception {
 
         ConditionExpression conditionExpression = new ConditionExpression(ConditionExpression.Operator.Equal, User.LIVEHIVELOGIN, liveHiveLogin);
@@ -1047,7 +1050,6 @@ public class OrganizationService {
                 + "    </Execute>\n"
                 + "  </s:Body>";
 
-
         Document xDoc = null;
         try {
             xDoc = CrmExecuteSoap.ExecuteSoapRequest(authHeader, request, crmServerUrl);
@@ -1193,7 +1195,7 @@ public class OrganizationService {
         try {
             xDoc = CrmExecuteSoap.ExecuteSoapRequest(authHeader, request, crmServerUrl);
         } catch (Exception e) {
-           Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).info(request);
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).info(request);
         }
         if (xDoc == null) {
             return null;
@@ -1655,8 +1657,8 @@ public class OrganizationService {
     public Document runFetchXmlQuery(String fetchXml) throws ParserConfigurationException, Exception {
 
         fetchXml = StringEscapeUtils.escapeXml(fetchXml);
-        
-        if(fetchXml.contains("{0}")) {
+
+        if (fetchXml.contains("{0}")) {
             throw new ServiceFaultException("Parameterized queries are not supported");
         }
 
