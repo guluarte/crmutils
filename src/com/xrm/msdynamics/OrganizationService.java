@@ -3,6 +3,8 @@ package com.xrm.msdynamics;
 import com.xrm.msdynamics.Enums.EntityName;
 
 import com.xrm.msdynamics.Enums.ParameterName;
+import com.xrm.msdynamics.api.ContactApi;
+import com.xrm.msdynamics.api.LeadApi;
 import com.xrm.msdynamics.crmtypes.ColumnSet;
 import com.xrm.msdynamics.crmtypes.ConditionExpression;
 import com.xrm.msdynamics.crmtypes.Criteria;
@@ -51,6 +53,8 @@ public class OrganizationService {
      */
     protected SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     private final CrmAuth auth = new CrmAuth();
+    private ContactApi contactApi;
+    private LeadApi leadApi;
 
     /**
      * Instantiates the service with the params passed.
@@ -77,6 +81,9 @@ public class OrganizationService {
             authHeader = auth.GetHeaderOnline(username,
                     userPassword, crmServerUrl);
         }
+
+        contactApi = new ContactApi(this);
+        leadApi = new LeadApi(this);
 
     }
 
@@ -492,22 +499,15 @@ public class OrganizationService {
     /**
      * Search a contact by their email address
      *
-     * @param contactName
+     * @param contactEmail
      * @return A list of contacts
      * @throws InstantiationException
      * @throws IllegalAccessException
      * @throws ParserConfigurationException
      * @throws Exception
      */
-    public ArrayList<Contact> RetrieveContactByEmail(String contactName) throws InstantiationException, IllegalAccessException, ParserConfigurationException, Exception {
-        EntityFactory entityFactory = new EntityFactory<>(Contact.class);
-        Document xDoc = RetrieveEntityByNameAndColumnString(EntityName.Contact, Contact.EMAILADDRESS1_COLUMN, contactName);
-        ArrayList<Contact> contacts = entityFactory.Build(xDoc);
-
-        if (contacts.isEmpty()) {
-            return null;
-        }
-        return contacts;
+    public ArrayList<Contact> RetrieveContactByEmail(String contactEmail) throws InstantiationException, IllegalAccessException, ParserConfigurationException, Exception {
+        return contactApi.retrieveInEmailList(new String[]{contactEmail});
     }
 
     /**
@@ -576,22 +576,15 @@ public class OrganizationService {
     /**
      * Retrieves the lead by his email
      *
-     * @param contactName
+     * @param leadEmail
      * @return A list of leads or null
      * @throws InstantiationException
      * @throws IllegalAccessException
      * @throws ParserConfigurationException
      * @throws Exception
      */
-    public ArrayList<Lead> RetrieveLeadByEmail(String contactName) throws InstantiationException, IllegalAccessException, ParserConfigurationException, Exception {
-        EntityFactory entityFactory = new EntityFactory<>(Lead.class);
-        Document xDoc = RetrieveEntityByNameAndColumnString(EntityName.Lead, Lead.EMAIL_COLUMN, contactName);
-        ArrayList<Lead> contacts = entityFactory.Build(xDoc);
-
-        if (contacts.isEmpty()) {
-            return null;
-        }
-        return contacts;
+    public ArrayList<Lead> RetrieveLeadByEmail(String leadEmail) throws InstantiationException, IllegalAccessException, ParserConfigurationException, Exception {
+        return leadApi.retrieveInEmailList(new String[]{leadEmail});
     }
 
     /**
